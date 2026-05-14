@@ -1,0 +1,36 @@
+﻿<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hexagon Border -->
+  <defs>
+    <style>
+      .hex-border { fill: none; stroke: #D4A017; stroke-width: 2.5; }
+      .hex-fill { fill: #D4A017; }
+      .wrench { fill: #D4A017; }
+      .gear { fill: #D4A017; }
+    </style>
+  </defs>
+
+  <!-- Hexagon (Gold) -->
+  <polygon class="hex-border" points="50,15 75,27.5 75,52.5 50,65 25,52.5 25,27.5" />
+  
+  <!-- Wrench -->
+  <g class="wrench">
+    <!-- Handle -->
+    <rect x="32" y="35" width="8" height="28" rx="2" transform="rotate(-25 36 49)" />
+    <!-- Head -->
+    <circle cx="45" cy="38" r="5" />
+    <rect x="40" y="33" width="10" height="10" rx="2" />
+  </g>
+
+  <!-- Gear -->
+  <g class="gear">
+    <!-- Center circle -->
+    <circle cx="55" cy="48" r="5" />
+    <!-- Teeth -->
+    <rect x="53" y="40" width="4" height="4" />
+    <rect x="53" y="56" width="4" height="4" />
+    <rect x="61" y="46" width="4" height="4" />
+    <rect x="41" y="46" width="4" height="4" />
+    <!-- Outer circle -->
+    <circle cx="55" cy="48" r="12" fill="none" stroke="#D4A017" stroke-width="1.5" />
+  </g>
+</svg>
