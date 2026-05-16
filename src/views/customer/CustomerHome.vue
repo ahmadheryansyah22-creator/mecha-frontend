@@ -4,7 +4,7 @@
     <div class="rounded-3xl p-10 mb-8" :style="{ background: `linear-gradient(135deg, var(--accent)20, transparent)`, border: `1px solid var(--accent)30` }">
       <div class="flex items-start justify-between">
         <div class="max-w-2xl">
-          <p class="text-sm mb-2 font-medium" :style="{ color: `var(--accent)` }">{{ greeting }}, {{ userName }}! ðŸ‘‹</p>
+          <p class="text-sm mb-2 font-medium" :style="{ color: `var(--accent)` }">{{ greeting }}, {{ userName }}! <HandRaisedIcon class="w-4 h-4 inline" /> </p>
           <h1 class="text-4xl font-bold mb-4" :style="{ color: `var(--text-primary)` }">
             Kendaraan Rusak? <br>
             <span :style="{ color: `var(--accent)` }">MECHA Siap Membantu!</span>
@@ -120,10 +120,11 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import {
-  BuildingStorefrontIcon, MapPinIcon, CubeIcon, TruckIcon,
+  BuildingStorefrontIcon, MapPinIcon, HandRaisedIcon, CubeIcon, TruckIcon,
   ClipboardDocumentListIcon, CheckCircleIcon, ClockIcon,
   ChevronRightIcon, CpuChipIcon, WrenchScrewdriverIcon,
 } from '@heroicons/vue/24/outline'
+// HandRaisedIcon already imported
 
 const loading = ref(true)
 const orders = ref([])

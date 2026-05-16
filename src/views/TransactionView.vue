@@ -63,7 +63,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { PlusIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
 
 const loading = ref(true)
 const showModal = ref(false)

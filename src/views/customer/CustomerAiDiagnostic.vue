@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div>
     <div class="mb-8">
       <h1 class="text-2xl font-bold flex items-center gap-3" :style="{ color: `var(--text-primary)` }">
