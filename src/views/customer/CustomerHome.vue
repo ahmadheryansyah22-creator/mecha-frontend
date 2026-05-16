@@ -4,7 +4,7 @@
     <div class="rounded-3xl p-10 mb-8" :style="{ background: `linear-gradient(135deg, var(--accent)20, transparent)`, border: `1px solid var(--accent)30` }">
       <div class="flex items-start justify-between">
         <div class="max-w-2xl">
-          <p class="text-sm mb-2 font-medium" :style="{ color: `var(--accent)` }">{{ greeting }}, {{ userName }}! 👋</p>
+          <p class="text-sm mb-2 font-medium" :style="{ color: `var(--accent)` }">{{ greeting }}, {{ userName }}! ðŸ‘‹</p>
           <h1 class="text-4xl font-bold mb-4" :style="{ color: `var(--text-primary)` }">
             Kendaraan Rusak? <br>
             <span :style="{ color: `var(--accent)` }">MECHA Siap Membantu!</span>
@@ -104,7 +104,7 @@
           </div>
           <div class="flex-1 min-w-0">
             <p class="font-medium text-sm truncate" :style="{ color: `var(--text-primary)` }">{{ order.order_number }}</p>
-            <p class="text-xs mt-1 truncate" :style="{ color: `var(--text-secondary)` }">{{ order.vehicle?.license_plate }} • {{ order.bengkel?.name }}</p>
+            <p class="text-xs mt-1 truncate" :style="{ color: `var(--text-secondary)` }">{{ order.vehicle?.license_plate }} â€¢ {{ order.bengkel?.name }}</p>
           </div>
           <div class="text-right shrink-0">
             <span class="text-xs px-2 py-1 rounded-full" :class="statusClass(order.status)">{{ order.status }}</span>
@@ -150,7 +150,7 @@ const updateTime = () => {
 const fitur = [
   { icon: MapPinIcon, title: 'Bengkel Terdekat', desc: 'Temukan bengkel terpercaya di sekitar lokasi kamu dengan mudah', bg: '#22c55e20', color: '#22c55e' },
   { icon: WrenchScrewdriverIcon, title: 'Mekanik Panggilan', desc: 'Mekanik profesional datang langsung ke lokasi kendaraan kamu', bg: '#f59e0b20', color: '#f59e0b' },
-  { icon: CubeIcon, title: 'Sparepart Lengkap', desc: 'Bengkel kami menyediakan stok sparepart lengkap untuk semua jenis kendaraan', bg: '#3b82f620', color: '#3b82f6' },
+  { icon: CubeIcon, title: 'Sparepart Lengkap', desc: 'Sparepart yang digunakan akan ditentukan mekanik sesuai kebutuhan kendaraan kamu', bg: '#3b82f620', color: '#3b82f6' },
 ]
 
 const statusClass = (s) => ({

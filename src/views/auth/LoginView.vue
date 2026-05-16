@@ -101,7 +101,13 @@ const loginGoogle = async () => {
     if (data.success) {
       localStorage.setItem('token', data.data.token)
       localStorage.setItem('user', JSON.stringify(data.data.user))
-      router.push('/customer')
+      if (data.is_new) router.push('/pilih-role')
+      else {
+        const role = data.data.user.role
+        if (role === 'customer') router.push('/customer')
+        else if (role === 'mekanik') router.push('/portal-mekanik')
+        else router.push('/')
+      }
     } else {
       error.value = data.message
     }
