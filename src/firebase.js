@@ -1,4 +1,4 @@
-﻿import { initializeApp } from "firebase/app"
+import { initializeApp } from "firebase/app"
 import { getAuth, GoogleAuthProvider, PhoneAuthProvider } from "firebase/auth"
 
 const firebaseConfig = {
@@ -12,6 +12,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
+auth.settings.appVerificationDisabledForTesting = false
+
 const googleProvider = new GoogleAuthProvider()
 const phoneProvider = new PhoneAuthProvider(auth)
 

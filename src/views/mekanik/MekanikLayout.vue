@@ -1,9 +1,9 @@
-﻿<template>
+<template>
   <div class="min-h-screen" :style="{ backgroundColor: `var(--bg-primary)` }">
     <aside class="fixed left-0 top-0 h-full w-64 z-50" :style="{ backgroundColor: `var(--bg-secondary)`, borderRight: `1px solid var(--border-color)` }">
       <div class="p-6 flex items-center justify-between" :style="{ borderBottom: `1px solid var(--border-color)` }">
         <div class="flex items-center gap-3">
-          <img src="@/assets/logo-mecha.png" class="w-8 h-8" />
+          <img src="@/assets/logo-mecha.png" class="h-10 w-auto object-contain" />
           <div>
             <h1 class="font-bold text-sm" :style="{ color: `var(--accent)` }">MECHA</h1>
             <p class="text-xs" :style="{ color: `var(--text-muted)` }">Portal Mekanik</p>
@@ -51,7 +51,8 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useThemeStore } from '@/stores/theme'
-import { HomeIcon, ClipboardDocumentListIcon, TruckIcon, CpuChipIcon, BanknotesIcon, ArrowRightOnRectangleIcon, MoonIcon, SunIcon } from '@heroicons/vue/24/outline'
+import { HomeIcon, ClipboardDocumentListIcon, TruckIcon, CpuChipIcon, BanknotesIcon, ArrowRightOnRectangleIcon,
+  UserIcon, MoonIcon, SunIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 const themeStore = useThemeStore()
@@ -67,6 +68,7 @@ const menuItems = [
   { name: 'kendaraan', label: 'Kendaraan', path: '/portal-mekanik/kendaraan', icon: TruckIcon },
   { name: 'penghasilan', label: 'Penghasilan', path: '/portal-mekanik/penghasilan', icon: BanknotesIcon },
   { name: 'ai', label: 'AI Diagnostic', path: '/portal-mekanik/ai-diagnostic', icon: CpuChipIcon },
+  { name: 'profil', label: 'Profil Saya', path: '/portal-mekanik/profil', icon: UserIcon },
 ]
 
 const logout = () => {

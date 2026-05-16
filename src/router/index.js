@@ -1,4 +1,4 @@
-﻿import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -18,6 +18,7 @@ const router = createRouter({
         { path: 'transaksi', name: 'transaksi', component: () => import('../views/TransactionView.vue') },
         { path: 'sparepart', name: 'sparepart', component: () => import('../views/SparePartView.vue') },
         { path: 'ai-diagnostic', name: 'ai-diagnostic', component: () => import('../views/AiDiagnosticView.vue') },
+        { path: 'profil', name: 'profil', component: () => import('../views/ProfileView.vue') },
       ]
     },
     {
@@ -30,6 +31,7 @@ const router = createRouter({
         { path: 'kendaraan', name: 'mekanik-kendaraan', component: () => import('../views/mekanik/MekanikVehicle.vue') },
         { path: 'penghasilan', name: 'mekanik-penghasilan', component: () => import('../views/mekanik/MekanikEarnings.vue') },
         { path: 'ai-diagnostic', name: 'mekanik-ai-diagnostic', component: () => import('../views/mekanik/MekanikAiDiagnostic.vue') },
+        { path: 'profil', name: 'mekanik-profil', component: () => import('../views/mekanik/MekanikProfile.vue') },
       ]
     },
     {
@@ -41,6 +43,7 @@ const router = createRouter({
         { path: 'bengkel', name: 'customer-bengkel', component: () => import('../views/customer/CustomerBengkel.vue') },
         { path: 'order', name: 'customer-order', component: () => import('../views/customer/CustomerOrder.vue') },
         { path: 'ai-diagnostic', name: 'customer-ai-diagnostic', component: () => import('../views/customer/CustomerAiDiagnostic.vue') },
+        { path: 'profil', name: 'customer-profil', component: () => import('../views/customer/CustomerProfile.vue') },
       ]
     },
   ]

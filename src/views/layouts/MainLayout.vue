@@ -1,10 +1,10 @@
-﻿<template>
+<template>
   <div :class="isDark ? 'dark' : 'light'" class="flex min-h-screen" :style="{ backgroundColor: 'var(--bg-primary)' }">
     <aside class="w-64 flex flex-col fixed h-full" :style="{ backgroundColor: 'var(--sidebar-bg)', borderRight: '1px solid var(--sidebar-border)' }">
       <!-- Logo -->
       <div class="p-5" :style="{ borderBottom: '1px solid var(--sidebar-border)' }">
         <div class="flex items-center gap-3">
-          <img src="@/assets/logo-mecha.png" alt="MECHA" class="w-16 h-16 object-contain" />
+          <img src="@/assets/logo-mecha.png" alt="MECHA" class="h-16 w-auto object-contain" />
           <div>
             <h1 class="font-bold" :style="{ color: 'var(--accent)' }">MECHA</h1>
             <p class="text-xs" :style="{ color: 'var(--text-muted)' }">Bengkel Management</p>
@@ -81,6 +81,7 @@ import {
   MoonIcon,
   SunIcon,
   ArrowRightOnRectangleIcon,
+  UserIcon,
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -97,6 +98,7 @@ const menus = [
   { path: '/transaksi', icon: BanknotesIcon, label: 'Transaksi' },
   { path: '/sparepart', icon: CubeIcon, label: 'Stok Sparepart' },
   { path: '/ai-diagnostic', icon: CpuChipIcon, label: 'AI Diagnostic' },
+  { path: '/profil', icon: UserIcon, label: 'Profil Saya' },
 ]
 
 const user = JSON.parse(localStorage.getItem('user') || '{}')

@@ -1,7 +1,7 @@
-﻿<template>
+<template>
   <div>
     <div class="mb-8">
-      <h1 class="text-2xl font-bold" :style="{ color: `var(--text-primary)` }">Cari Bengkel & Mekanik</h1>
+      <h1 class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--text-primary)` }">Cari Bengkel & Mekanik</h1>
       <p class="mt-1" :style="{ color: `var(--text-secondary)` }">Temukan bengkel atau mekanik panggilan terpercaya</p>
     </div>
 

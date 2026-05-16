@@ -1,8 +1,8 @@
-﻿<template>
+<template>
   <div>
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h1 class="text-2xl font-bold" :style="{ color: `var(--text-primary)` }">Stok Sparepart</h1>
+        <h1 class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--text-primary)` }"><CubeIcon class="w-7 h-7" :style="{ color: `var(--accent)` }" /> Stok Sparepart</h1>
         <p class="mt-1" :style="{ color: `var(--text-secondary)` }">Kelola stok sparepart bengkel</p>
       </div>
       <button @click="showModal = true" class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2">
@@ -18,7 +18,7 @@
             <CubeIcon class="w-6 h-6 text-green-400" />
           </div>
           <div>
-            <p class="text-2xl font-bold" :style="{ color: `var(--text-primary)` }">{{ totalParts }}</p>
+            <p class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--text-primary)` }">{{ totalParts }}</p>
             <p class="text-sm" :style="{ color: `var(--text-secondary)` }">Total Sparepart</p>
           </div>
         </div>
@@ -40,7 +40,7 @@
             <BanknotesIcon class="w-6 h-6 text-yellow-400" />
           </div>
           <div>
-            <p class="text-2xl font-bold" :style="{ color: `var(--accent)` }">Rp {{ formatRupiah(totalValue) }}</p>
+            <p class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--accent)` }">Rp {{ formatRupiah(totalValue) }}</p>
             <p class="text-sm" :style="{ color: `var(--text-secondary)` }">Total Nilai Stok</p>
           </div>
         </div>
@@ -89,7 +89,7 @@
             >
               <td class="py-3">
                 <p class="text-sm font-medium" :style="{ color: `var(--text-primary)` }">{{ part.name }}</p>
-                <p class="text-xs" :style="{ color: `var(--text-muted)` }">{{ part.code || '-' }} • {{ part.brand || '-' }}</p>
+                <p class="text-xs" :style="{ color: `var(--text-muted)` }">{{ part.code || '-' }} â€¢ {{ part.brand || '-' }}</p>
               </td>
               <td class="py-3 text-sm" :style="{ color: `var(--text-secondary)` }">{{ part.category || '-' }}</td>
               <td class="py-3 text-sm font-medium" :style="{ color: `var(--accent)` }">Rp {{ formatRupiah(part.price) }}</td>
