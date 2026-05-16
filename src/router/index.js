@@ -1,12 +1,14 @@
+import LandingView from '@/views/LandingView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: '/', name: 'landing', component: LandingView, meta: { requiresAuth: false } },
     { path: '/login', name: 'login', component: () => import('../views/auth/LoginView.vue'), meta: { guest: true } },
     { path: '/register', name: 'register', component: () => import('../views/auth/RegisterView.vue'), meta: { guest: true } },
     { path: '/pilih-role', name: 'pilih-role', component: () => import('../views/auth/RoleSelectView.vue'), meta: { requiresAuth: true } },
     {
-      path: '/',
+      path: '/dashboard',
       component: () => import('../views/layouts/MainLayout.vue'),
       meta: { requiresAuth: true, role: ['bengkel'] },
       children: [
@@ -56,12 +58,12 @@ router.beforeEach((to, from, next) => {
   if (to.meta.guest && token) {
     if (role === 'customer') return next('/customer')
     if (role === 'mekanik') return next('/portal-mekanik')
-    return next('/')
+    return next('/dashboard')
   }
   if (to.meta.role && !to.meta.role.includes(role)) {
     if (role === 'customer') return next('/customer')
     if (role === 'mekanik') return next('/portal-mekanik')
-    return next('/')
+    return next('/dashboard')
   }
   return next()
 })

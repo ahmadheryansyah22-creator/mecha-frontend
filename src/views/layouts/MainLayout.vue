@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div :class="isDark ? 'dark' : 'light'" class="flex min-h-screen" :style="{ backgroundColor: 'var(--bg-primary)' }">
 
     <aside class="fixed h-full z-50 flex flex-col transition-all duration-300"
@@ -119,15 +119,15 @@ const toggleTheme = () => themeStore.toggleTheme()
 const collapsed = ref(false)
 
 const menus = [
-  { path: '/', icon: Squares2X2Icon, label: 'Dashboard' },
-  { path: '/bengkel', icon: BuildingStorefrontIcon, label: 'Bengkel' },
-  { path: '/kendaraan', icon: TruckIcon, label: 'Kendaraan' },
-  { path: '/daftar-mekanik', icon: WrenchIcon, label: 'Mekanik' },
-  { path: '/order', icon: ClipboardDocumentListIcon, label: 'Order Servis' },
-  { path: '/transaksi', icon: BanknotesIcon, label: 'Transaksi' },
-  { path: '/sparepart', icon: CubeIcon, label: 'Stok Sparepart' },
-  { path: '/ai-diagnostic', icon: CpuChipIcon, label: 'AI Diagnostic' },
-  { path: '/profil', icon: UserIcon, label: 'Profil Saya' },
+  { path: '/dashboard', icon: Squares2X2Icon, label: 'Dashboard' },
+  { path: '/dashboard/bengkel', icon: BuildingStorefrontIcon, label: 'Bengkel' },
+  { path: '/dashboard/kendaraan', icon: TruckIcon, label: 'Kendaraan' },
+  { path: '/dashboard/daftar-mekanik', icon: WrenchIcon, label: 'Mekanik' },
+  { path: '/dashboard/order', icon: ClipboardDocumentListIcon, label: 'Order Servis' },
+  { path: '/dashboard/transaksi', icon: BanknotesIcon, label: 'Transaksi' },
+  { path: '/dashboard/sparepart', icon: CubeIcon, label: 'Stok Sparepart' },
+  { path: '/dashboard/ai-diagnostic', icon: CpuChipIcon, label: 'AI Diagnostic' },
+  { path: '/dashboard/profil', icon: UserIcon, label: 'Profil Saya' },
 ]
 
 const isActive = (path) => path === '/' ? route.path === '/' : route.path.startsWith(path)

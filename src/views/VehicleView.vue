@@ -14,7 +14,7 @@
     </div>
 
     <div class="card">
-      <SkeletonLoader type="table" :count="5" />
+      <SkeletonLoader v-if="loading" type="table" :count="5" />
       <div v-else-if="vehicles.length === 0" class="text-center py-8" :style="{ color: `var(--text-muted)` }">Belum ada data kendaraan</div>
       <div v-else class="overflow-x-auto">
         <table class="w-full">

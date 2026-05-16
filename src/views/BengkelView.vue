@@ -14,7 +14,7 @@
     </div>
 
     <div class="card">
-      <SkeletonLoader type="table" :count="5" />
+      <SkeletonLoader v-if="loading" type="table" :count="5" />
       <div v-else-if="bengkels.length === 0" class="text-center py-8" :style="{ color: `var(--text-muted)` }">Belum ada data bengkel</div>
       <div v-else class="overflow-x-auto">
         <table class="w-full">

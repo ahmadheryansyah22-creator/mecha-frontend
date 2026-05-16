@@ -89,7 +89,7 @@
             >
               <td class="py-3">
                 <p class="text-sm font-medium" :style="{ color: `var(--text-primary)` }">{{ part.name }}</p>
-                <p class="text-xs" :style="{ color: `var(--text-muted)` }">{{ part.code || '-' }} Ã¢â‚¬Â¢ {{ part.brand || '-' }}</p>
+                <p class="text-xs" :style="{ color: `var(--text-muted)` }">{{ part.code || '-' }} ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ {{ part.brand || '-' }}</p>
               </td>
               <td class="py-3 text-sm" :style="{ color: `var(--text-secondary)` }">{{ part.category || '-' }}</td>
               <td class="py-3 text-sm font-medium" :style="{ color: `var(--accent)` }">Rp {{ formatRupiah(part.price) }}</td>
