@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,7 +51,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: "Space Grotesk", "Inter", sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -95,7 +95,7 @@ body {
   font-size: 0.875rem;
   transition: all 0.2s ease;
   outline: none;
-  font-family: "Inter", sans-serif;
+  font-family: "Space Grotesk", "Inter", sans-serif;
 }
 
 .input-field:focus {
@@ -118,7 +118,7 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: "Inter", sans-serif;
+  font-family: "Space Grotesk", "Inter", sans-serif;
   font-size: 0.875rem;
   box-shadow: 0 4px 15px var(--accent-glow);
 }

@@ -1,53 +1,107 @@
-<template>
-  <div class="min-h-screen bg-[#0f0f0f] flex items-center justify-center px-4">
-    <div class="w-full max-w-md">
-      <div class="text-center mb-8">
-        <img src="@/assets/logo-mecha.png" alt="MECHA" class="h-16 w-auto object-contain mx-auto mb-2" />
-        <h1 class="text-3xl font-bold text-yellow-400">MECHA</h1>
-        <p class="text-gray-400 mt-1">Sistem Manajemen Bengkel Mobil</p>
+﻿<template>
+  <div :class="isDark ? 'dark' : 'light'" class="min-h-screen flex" :style="{ backgroundColor: 'var(--bg-primary)' }">
+    
+    <!-- Left Panel -->
+    <div class="hidden lg:flex flex-col justify-between w-1/2 p-12 relative overflow-hidden"
+      style="background: linear-gradient(135deg, #0a0a0f 0%, #1a1a0a 50%, #0f0f0a 100%);">
+      <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-20"
+        style="background: radial-gradient(circle, #f5c518, transparent);"></div>
+      
+      <div class="flex items-center gap-3 relative z-10">
+        <img src="@/assets/logo-mecha.png" alt="MECHA" class="w-10 h-10 object-contain" />
+        <span class="font-bold text-xl text-white">MECHA</span>
       </div>
 
-      <div class="bg-[#1a1a1a] rounded-2xl p-8 border border-gray-800 shadow-2xl">
-        <h2 class="text-xl font-semibold text-white mb-6">Masuk ke Akun</h2>
+      <div class="relative z-10">
+        <h2 class="text-4xl font-bold text-white mb-4 leading-tight">
+          Kelola Bengkel <br>
+          <span style="color: #f5c518;">Lebih Cerdas</span>
+        </h2>
+        <p class="text-gray-400 text-lg mb-8">Platform manajemen bengkel modern dengan AI Diagnostic terintegrasi.</p>
+        <div class="space-y-3">
+          <div v-for="f in features" :key="f" class="flex items-center gap-3">
+            <div class="w-5 h-5 rounded-full flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, #f5c518, #e0b015);">
+              <CheckIcon class="w-3 h-3 text-black" />
+            </div>
+            <span class="text-gray-300 text-sm">{{ f }}</span>
+          </div>
+        </div>
+      </div>
 
-        <div v-if="error" class="bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg p-3 mb-4 text-sm">
-          {{ error }}
+      <p class="text-gray-600 text-xs relative z-10">© 2026 MECHA. All rights reserved.</p>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="flex-1 flex items-center justify-center px-6 py-12">
+      <div class="w-full max-w-md">
+        <div class="flex items-center gap-3 mb-8 lg:hidden">
+          <img src="@/assets/logo-mecha.png" alt="MECHA" class="w-9 h-9 object-contain" />
+          <span class="font-bold text-lg" :style="{ color: 'var(--accent)' }">MECHA</span>
         </div>
 
-        <div class="mb-4">
-          <label class="block text-gray-400 text-sm mb-2">Email</label>
-          <input v-model="form.email" type="email" placeholder="email@mecha.com" class="input-field" required />
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h1 class="text-2xl font-bold" :style="{ color: 'var(--text-primary)' }">Selamat Datang</h1>
+            <p class="text-sm mt-1" :style="{ color: 'var(--text-secondary)' }">Masuk ke akun MECHA kamu</p>
+          </div>
+          <button @click="toggleTheme" class="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
+            :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }">
+            <MoonIcon v-if="isDark" class="w-4 h-4" :style="{ color: 'var(--text-secondary)' }" />
+            <SunIcon v-else class="w-4 h-4" :style="{ color: 'var(--text-secondary)' }" />
+          </button>
         </div>
 
-        <div class="mb-6">
-          <label class="block text-gray-400 text-sm mb-2">Password</label>
-          <div class="relative">
-            <input v-model="form.password" :type="showPass ? 'text' : 'password'" placeholder="Password" class="input-field pr-10" required />
-            <button type="button" @click="showPass = !showPass" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300">
-              <component :is="showPass ? EyeSlashIcon : EyeIcon" class="w-4 h-4" />
-            </button>
+        <div v-if="errorMsg" class="mb-4 p-3 rounded-xl text-sm flex items-center gap-2"
+          style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); color: #ef4444;">
+          <ExclamationCircleIcon class="w-4 h-4 shrink-0" />
+          {{ errorMsg }}
+        </div>
+
+        <div class="space-y-4 mb-6">
+          <div>
+            <label class="block text-sm font-medium mb-2" :style="{ color: 'var(--text-secondary)' }">Email</label>
+            <input v-model="form.email" type="email" placeholder="email@example.com"
+              class="input-field" @keyup.enter="login" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2" :style="{ color: 'var(--text-secondary)' }">Password</label>
+            <div class="relative">
+              <input v-model="form.password" :type="showPassword ? 'text' : 'password'" placeholder="Password"
+                class="input-field pr-10" @keyup.enter="login" />
+              <button @click="showPassword = !showPassword" type="button"
+                class="absolute right-3 top-1/2 -translate-y-1/2" :style="{ color: 'var(--text-muted)' }">
+                <EyeSlashIcon v-if="showPassword" class="w-4 h-4" />
+                <EyeIcon v-else class="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 
-        <button @click="login" :disabled="loading" class="w-full btn-primary py-3 rounded-lg text-black font-semibold mb-4">
-          {{ loading ? 'Memproses...' : 'Masuk' }}
+        <button @click="login" :disabled="loading" class="btn-primary w-full py-3 rounded-xl mb-4 disabled:opacity-50">
+          <span v-if="loading" class="flex items-center gap-2 justify-center">
+            <ArrowPathIcon class="w-4 h-4 animate-spin" /> Memproses...
+          </span>
+          <span v-else>Masuk</span>
         </button>
 
-        <div class="flex items-center gap-3 my-4">
-          <div class="flex-1 h-px bg-gray-800"></div>
-          <span class="text-gray-500 text-xs">atau</span>
-          <div class="flex-1 h-px bg-gray-800"></div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="flex-1 h-px" :style="{ backgroundColor: 'var(--border-color)' }"></div>
+          <span class="text-xs" :style="{ color: 'var(--text-muted)' }">atau</span>
+          <div class="flex-1 h-px" :style="{ backgroundColor: 'var(--border-color)' }"></div>
         </div>
 
-        <button @click="loginGoogle" :disabled="loadingGoogle"
-          class="w-full flex items-center justify-center gap-3 py-3 rounded-lg border border-gray-700 text-gray-300 hover:border-yellow-400 hover:text-yellow-400 transition-all text-sm font-medium">
-          <img src="https://www.google.com/favicon.ico" class="w-5 h-5" />
-          {{ loadingGoogle ? 'Memproses...' : 'Masuk dengan Google' }}
+        <button @click="loginWithGoogle" :disabled="googleLoading"
+          class="w-full py-3 rounded-xl font-medium text-sm transition-all flex items-center justify-center gap-2 mb-6 disabled:opacity-50"
+          :style="{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }">
+          <img src="https://www.google.com/favicon.ico" class="w-4 h-4" />
+          {{ googleLoading ? 'Memproses...' : 'Masuk dengan Google' }}
         </button>
 
-        <p class="text-center text-gray-500 text-sm mt-6">
+        <p class="text-center text-sm" :style="{ color: 'var(--text-muted)' }">
           Belum punya akun?
-          <RouterLink to="/register" class="text-yellow-400 hover:text-yellow-300">Daftar sekarang</RouterLink>
+          <RouterLink to="/register" class="font-semibold hover:opacity-80 transition-all" :style="{ color: 'var(--accent)' }">
+            Daftar sekarang
+          </RouterLink>
         </p>
       </div>
     </div>
@@ -55,66 +109,86 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useThemeStore } from '@/stores/theme'
 import axios from 'axios'
-import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/outline'
 import { signInWithPopup } from 'firebase/auth'
 import { auth, googleProvider } from '@/firebase'
+import {
+  CheckIcon, MoonIcon, SunIcon,
+  EyeIcon, EyeSlashIcon,
+  ArrowPathIcon, ExclamationCircleIcon,
+} from '@heroicons/vue/24/outline'
 
 const router = useRouter()
+const themeStore = useThemeStore()
+const isDark = computed(() => themeStore.isDark)
+const toggleTheme = () => themeStore.toggleTheme()
+
 const loading = ref(false)
-const loadingGoogle = ref(false)
-const error = ref('')
-const showPass = ref(false)
+const googleLoading = ref(false)
+const errorMsg = ref('')
+const showPassword = ref(false)
 const form = ref({ email: '', password: '' })
 
+const features = [
+  'Manajemen order & transaksi real-time',
+  'AI Diagnostic kendaraan otomatis',
+  'Stok sparepart terintegrasi',
+  'Multi-role: Bengkel, Mekanik & Customer',
+]
+
 const login = async () => {
+  errorMsg.value = ''
+  if (!form.value.email || !form.value.password) {
+    errorMsg.value = 'Email dan password wajib diisi'
+    return
+  }
   loading.value = true
-  error.value = ''
   try {
     const res = await axios.post('/api/login', form.value)
-    localStorage.setItem('token', res.data.data.token)
-    localStorage.setItem('user', JSON.stringify(res.data.data.user))
-    const role = res.data.data.user.role
-    if (role === 'customer') router.push('/customer')
-    else router.push('/')
+    if (res.data.success) {
+      localStorage.setItem('token', res.data.data.token)
+      localStorage.setItem('user', JSON.stringify(res.data.data.user))
+      const role = res.data.data.user.role
+      if (role === 'customer') router.push('/customer')
+      else if (role === 'mekanik') router.push('/portal-mekanik')
+      else router.push('/')
+    } else {
+      errorMsg.value = res.data.message
+    }
   } catch (err) {
-    error.value = err.response?.data?.message || 'Login gagal'
+    errorMsg.value = 'Email atau password salah.'
   } finally {
     loading.value = false
   }
 }
 
-const loginGoogle = async () => {
-  loadingGoogle.value = true
-  error.value = ''
+const loginWithGoogle = async () => {
+  errorMsg.value = ''
+  googleLoading.value = true
   try {
     const result = await signInWithPopup(auth, googleProvider)
     const idToken = await result.user.getIdToken()
-    const res = await fetch('http://localhost:8000/api/auth/google', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id_token: idToken })
-    })
-    const data = await res.json()
-    if (data.success) {
-      localStorage.setItem('token', data.data.token)
-      localStorage.setItem('user', JSON.stringify(data.data.user))
-      if (data.is_new) router.push('/pilih-role')
+    const res = await axios.post('/api/auth/google', { id_token: idToken })
+    if (res.data.success) {
+      localStorage.setItem('token', res.data.data.token)
+      localStorage.setItem('user', JSON.stringify(res.data.data.user))
+      if (res.data.is_new) router.push('/pilih-role')
       else {
-        const role = data.data.user.role
+        const role = res.data.data.user.role
         if (role === 'customer') router.push('/customer')
         else if (role === 'mekanik') router.push('/portal-mekanik')
         else router.push('/')
       }
     } else {
-      error.value = data.message
+      errorMsg.value = res.data.message
     }
   } catch (err) {
-    error.value = 'Login Google gagal: ' + (err.message || 'Coba lagi')
+    errorMsg.value = 'Gagal masuk dengan Google.'
   } finally {
-    loadingGoogle.value = false
+    googleLoading.value = false
   }
 }
 </script>
