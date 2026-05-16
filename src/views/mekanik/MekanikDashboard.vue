@@ -141,7 +141,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
       <div class="card">
         <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
-          <FireIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Tips Mekanik Profesional
+          <BoltIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Tips Mekanik Profesional
         </h2>
         <div class="space-y-3">
           <div v-for="tip in tips" :key="tip.title" class="flex items-start gap-3 p-3 rounded-xl" :style="{ backgroundColor: 'var(--bg-primary)' }">
@@ -189,7 +189,8 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import {
-  HomeIcon, ClipboardDocumentListIcon, TruckIcon, CheckCircleIcon,
+  HomeIcon,
+  BoltIcon, ClipboardDocumentListIcon, TruckIcon, CheckCircleIcon,
   BanknotesIcon, ChevronRightIcon, ChartPieIcon, WrenchIcon,
   CpuChipIcon, UserIcon, CalendarDaysIcon, ClockIcon, FireIcon,
 } from '@heroicons/vue/24/outline'
