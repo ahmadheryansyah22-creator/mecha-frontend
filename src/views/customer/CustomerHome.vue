@@ -1,118 +1,160 @@
-<template>
-  <div>
-    <!-- Hero + Greeting -->
-    <div class="rounded-3xl p-10 mb-8" :style="{ background: `linear-gradient(135deg, var(--accent)20, transparent)`, border: `1px solid var(--accent)30` }">
-      <div class="flex items-start justify-between">
-        <div class="max-w-2xl">
-          <p class="text-sm mb-2 font-medium" :style="{ color: `var(--accent)` }">{{ greeting }}, {{ userName }}! <HandRaisedIcon class="w-4 h-4 inline" /> </p>
-          <h1 class="text-4xl font-bold mb-4" :style="{ color: `var(--text-primary)` }">
-            Kendaraan Rusak? <br>
+﻿<template>
+  <div class="animate-fadein">
+
+    <!-- Hero Banner -->
+    <div class="relative rounded-3xl overflow-hidden mb-8 p-8 md:p-12"
+      :style="{ background: `linear-gradient(135deg, var(--accent)25, var(--bg-secondary))`, border: `1px solid var(--accent)40` }">
+      <div class="absolute top-0 right-0 w-64 h-64 rounded-full opacity-10 -translate-y-1/2 translate-x-1/4"
+        :style="{ backgroundColor: `var(--accent)` }"></div>
+      <div class="absolute bottom-0 right-24 w-32 h-32 rounded-full opacity-10 translate-y-1/2"
+        :style="{ backgroundColor: `var(--accent)` }"></div>
+
+      <div class="relative z-10 flex items-start justify-between">
+        <div class="max-w-xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold mb-4"
+            :style="{ backgroundColor: `var(--accent)20`, color: `var(--accent)`, border: `1px solid var(--accent)40` }">
+            <span class="w-1.5 h-1.5 rounded-full animate-pulse" :style="{ backgroundColor: `var(--accent)` }"></span>
+            {{ greeting }}, {{ userName }}!
+          </div>
+          <h1 class="text-3xl md:text-4xl font-bold mb-3 leading-tight" :style="{ color: `var(--text-primary)` }">
+            Kendaraan Masalah? <br>
             <span :style="{ color: `var(--accent)` }">MECHA Siap Membantu!</span>
           </h1>
-          <p class="text-lg mb-8" :style="{ color: `var(--text-secondary)` }">Temukan bengkel terdekat atau panggil mekanik langsung ke lokasi kamu. Cepat, terpercaya, dan transparan.</p>
-          <div class="flex gap-4 flex-wrap">
-            <RouterLink to="/customer/bengkel" class="btn-primary px-6 py-3 rounded-xl font-semibold flex items-center gap-2">
-              <BuildingStorefrontIcon class="w-5 h-5" /> Cari Bengkel
+          <p class="text-sm md:text-base mb-6" :style="{ color: `var(--text-secondary)` }">
+            Temukan bengkel terdekat atau gunakan AI Diagnostic untuk analisa kendaraanmu secara instan.
+          </p>
+          <div class="flex gap-3 flex-wrap">
+            <RouterLink to="/customer/bengkel"
+              class="btn-primary px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 text-sm hover:scale-105 transition-transform">
+              <BuildingStorefrontIcon class="w-4 h-4" /> Cari Bengkel
             </RouterLink>
-            <RouterLink to="/customer/ai-diagnostic" class="px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition-all"
+            <RouterLink to="/customer/ai-diagnostic"
+              class="px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 text-sm transition-all hover:scale-105"
               :style="{ border: `1px solid var(--accent)`, color: `var(--accent)` }">
-              <CpuChipIcon class="w-5 h-5" /> AI Diagnostic
+              <CpuChipIcon class="w-4 h-4" /> AI Diagnostic
             </RouterLink>
           </div>
         </div>
-        <div class="hidden md:block text-right">
-          <p class="text-sm font-medium" :style="{ color: `var(--text-primary)` }">{{ currentDate }}</p>
-          <p class="text-xs mt-1" :style="{ color: `var(--text-muted)` }">{{ currentTime }}</p>
+        <div class="hidden md:block text-right shrink-0">
+          <p class="font-semibold text-sm" :style="{ color: `var(--text-primary)` }">{{ currentDate }}</p>
+          <p class="text-2xl font-bold mt-1 tabular-nums" :style="{ color: `var(--accent)` }">{{ currentTime }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="card flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background-color: #f59e0b20;">
-          <ClipboardDocumentListIcon class="w-6 h-6" style="color: #f59e0b;" />
+    <!-- Stat Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div v-for="(stat, i) in stats" :key="stat.label"
+        class="card flex items-center gap-4 hover:scale-[1.02] transition-all duration-300 cursor-default">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+          :style="{ background: stat.gradient }">
+          <component :is="stat.icon" class="w-6 h-6 text-white" />
         </div>
         <div>
-          <p class="text-2xl font-bold" :style="{ color: `var(--text-primary)` }">{{ orders.length }}</p>
-          <p class="text-sm" :style="{ color: `var(--text-secondary)` }">Total Order</p>
+          <p class="text-2xl font-bold" :style="{ color: `var(--text-primary)` }">{{ stat.value }}</p>
+          <p class="text-xs" :style="{ color: `var(--text-secondary)` }">{{ stat.label }}</p>
         </div>
-      </div>
-      <div class="card flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background-color: #22c55e20;">
-          <CheckCircleIcon class="w-6 h-6" style="color: #22c55e;" />
-        </div>
-        <div>
-          <p class="text-2xl font-bold" :style="{ color: `var(--text-primary)` }">{{ orders.filter(o => o.status === 'completed').length }}</p>
-          <p class="text-sm" :style="{ color: `var(--text-secondary)` }">Order Selesai</p>
-        </div>
-      </div>
-      <div class="card flex items-center gap-4">
-        <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background-color: #3b82f620;">
-          <ClockIcon class="w-6 h-6" style="color: #3b82f6;" />
-        </div>
-        <div>
-          <p class="text-2xl font-bold" :style="{ color: `var(--text-primary)` }">{{ orders.filter(o => o.status === 'in_progress').length }}</p>
-          <p class="text-sm" :style="{ color: `var(--text-secondary)` }">Sedang Dikerjakan</p>
+        <div class="ml-auto">
+          <span class="text-xs px-2 py-1 rounded-full font-medium" :style="{ backgroundColor: stat.badgeBg, color: stat.badgeColor }">
+            {{ stat.badge }}
+          </span>
         </div>
       </div>
     </div>
 
-    <!-- Fitur -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div v-for="f in fitur" :key="f.title" class="card text-center hover:scale-[1.02] transition-transform">
-        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" :style="{ backgroundColor: f.bg }">
-          <component :is="f.icon" class="w-7 h-7" :style="{ color: f.color }" />
+    <!-- Fitur & Status Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div v-for="f in fitur" :key="f.title"
+          class="card text-center hover:scale-[1.03] hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+          @click="$router.push(f.path)">
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform"
+            :style="{ background: f.gradient }">
+            <component :is="f.icon" class="w-7 h-7 text-white" />
+          </div>
+          <h3 class="font-semibold text-sm mb-1" :style="{ color: `var(--text-primary)` }">{{ f.title }}</h3>
+          <p class="text-xs leading-relaxed" :style="{ color: `var(--text-secondary)` }">{{ f.desc }}</p>
         </div>
-        <h3 class="font-semibold mb-2" :style="{ color: `var(--text-primary)` }">{{ f.title }}</h3>
-        <p class="text-sm" :style="{ color: `var(--text-secondary)` }">{{ f.desc }}</p>
+      </div>
+
+      <div class="card">
+        <h2 class="font-semibold text-sm mb-4 flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
+          <ChartPieIcon class="w-4 h-4" :style="{ color: `var(--accent)` }" /> Status Order
+        </h2>
+        <div class="space-y-3">
+          <div v-for="s in orderStatus" :key="s.label" class="flex items-center gap-3">
+            <div class="w-2.5 h-2.5 rounded-full shrink-0" :style="{ backgroundColor: s.color }"></div>
+            <span class="text-xs flex-1" :style="{ color: `var(--text-secondary)` }">{{ s.label }}</span>
+            <span class="text-xs font-bold" :style="{ color: `var(--text-primary)` }">{{ s.value }}</span>
+          </div>
+        </div>
+        <div class="mt-4 flex gap-1 h-2 rounded-full overflow-hidden">
+          <div v-for="s in orderStatus.filter(x => x.value > 0)" :key="s.label"
+            class="transition-all duration-500"
+            :style="{ backgroundColor: s.color, flex: s.value }">
+          </div>
+        </div>
+        <RouterLink to="/customer/order"
+          class="mt-4 w-full flex items-center justify-center gap-1 text-xs font-medium py-2 rounded-xl transition-all hover:opacity-80"
+          :style="{ backgroundColor: `var(--bg-primary)`, color: `var(--accent)` }">
+          Lihat Semua Order <ChevronRightIcon class="w-3 h-3" />
+        </RouterLink>
       </div>
     </div>
 
     <!-- Order Terakhir -->
     <div class="card">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-lg font-semibold flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-          <ClipboardDocumentListIcon class="w-5 h-5" :style="{ color: `var(--accent)` }" />
-          Order Terakhir Saya
+      <div class="flex items-center justify-between mb-5">
+        <h2 class="font-semibold flex items-center gap-2 text-sm" :style="{ color: `var(--text-primary)` }">
+          <ClipboardDocumentListIcon class="w-4 h-4" :style="{ color: `var(--accent)` }" /> Order Terakhir
         </h2>
-        <RouterLink to="/customer/order" class="text-sm flex items-center gap-1 hover:opacity-80" :style="{ color: `var(--accent)` }">
-          Lihat semua <ChevronRightIcon class="w-4 h-4" />
+        <RouterLink to="/customer/order"
+          class="text-xs font-medium flex items-center gap-1 hover:opacity-70 transition-all"
+          :style="{ color: `var(--accent)` }">
+          Lihat semua <ChevronRightIcon class="w-3 h-3" />
         </RouterLink>
       </div>
 
-      <div v-if="loading" class="text-center py-12">
-        <div class="w-8 h-8 border-2 rounded-full animate-spin mx-auto mb-3" :style="{ borderColor: `var(--accent)`, borderTopColor: `transparent` }"></div>
-        <p class="text-sm" :style="{ color: `var(--text-muted)` }">Memuat data...</p>
+      <div v-if="loading" class="text-center py-10">
+        <div class="w-7 h-7 border-2 rounded-full animate-spin mx-auto mb-2"
+          :style="{ borderColor: `var(--accent)`, borderTopColor: `transparent` }"></div>
+        <p class="text-xs" :style="{ color: `var(--text-muted)` }">Memuat data...</p>
       </div>
 
       <div v-else-if="orders.length === 0" class="text-center py-12">
-        <TruckIcon class="w-16 h-16 mx-auto mb-4" :style="{ color: `var(--text-muted)` }" />
-        <p class="font-medium mb-2" :style="{ color: `var(--text-primary)` }">Belum ada order servis</p>
-        <p class="text-sm mb-4" :style="{ color: `var(--text-muted)` }">Mulai cari bengkel terpercaya sekarang</p>
-        <RouterLink to="/customer/bengkel" class="btn-primary px-6 py-2 rounded-xl inline-flex items-center gap-2">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
+          style="background: linear-gradient(135deg, #f59e0b30, #d97706);">
+          <TruckIcon class="w-8 h-8" style="color: #f59e0b;" />
+        </div>
+        <p class="font-semibold mb-1" :style="{ color: `var(--text-primary)` }">Belum ada order servis</p>
+        <p class="text-xs mb-4" :style="{ color: `var(--text-muted)` }">Mulai cari bengkel terpercaya sekarang</p>
+        <RouterLink to="/customer/bengkel" class="btn-primary px-5 py-2 rounded-xl inline-flex items-center gap-2 text-sm">
           <BuildingStorefrontIcon class="w-4 h-4" /> Cari Bengkel
         </RouterLink>
       </div>
 
-      <div v-else class="space-y-3">
+      <div v-else class="space-y-2">
         <div v-for="order in orders" :key="order.id"
-          class="rounded-xl p-4 flex items-center gap-4"
-          :style="{ backgroundColor: `var(--bg-primary)`, border: `1px solid var(--border-color)` }">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background-color: #f59e0b20;">
-            <ClipboardDocumentListIcon class="w-5 h-5" style="color: #f59e0b;" />
+          class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all hover:opacity-80"
+          :style="{ backgroundColor: `var(--bg-primary)` }">
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <ClipboardDocumentListIcon class="w-4 h-4 text-white" />
           </div>
           <div class="flex-1 min-w-0">
             <p class="font-medium text-sm truncate" :style="{ color: `var(--text-primary)` }">{{ order.order_number }}</p>
-            <p class="text-xs mt-1 truncate" :style="{ color: `var(--text-secondary)` }">{{ order.vehicle?.license_plate }} â€¢ {{ order.bengkel?.name }}</p>
+            <p class="text-xs mt-0.5 truncate" :style="{ color: `var(--text-muted)` }">
+              {{ order.vehicle?.license_plate }} &bull; {{ order.bengkel?.name }}
+            </p>
           </div>
           <div class="text-right shrink-0">
-            <span class="text-xs px-2 py-1 rounded-full" :class="statusClass(order.status)">{{ order.status }}</span>
-            <p class="text-sm font-medium mt-1" :style="{ color: `var(--accent)` }">Rp {{ formatRupiah(order.final_price) }}</p>
+            <span class="text-xs px-2 py-1 rounded-full font-medium" :class="statusClass(order.status)">{{ order.status }}</span>
+            <p class="text-xs font-semibold mt-1" :style="{ color: `var(--accent)` }">Rp {{ formatRupiah(order.final_price) }}</p>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -120,11 +162,10 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import {
-  BuildingStorefrontIcon, MapPinIcon, HandRaisedIcon, CubeIcon, TruckIcon,
+  BuildingStorefrontIcon, MapPinIcon, TruckIcon,
   ClipboardDocumentListIcon, CheckCircleIcon, ClockIcon,
-  ChevronRightIcon, CpuChipIcon, WrenchScrewdriverIcon,
+  ChevronRightIcon, CpuChipIcon, WrenchScrewdriverIcon, ChartPieIcon,
 } from '@heroicons/vue/24/outline'
-// HandRaisedIcon already imported
 
 const loading = ref(true)
 const orders = ref([])
@@ -148,10 +189,23 @@ const updateTime = () => {
   currentDate.value = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 }
 
+const stats = computed(() => [
+  { label: 'Total Order', value: orders.value.length, badge: 'Semua', icon: ClipboardDocumentListIcon, gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', badgeBg: '#f59e0b20', badgeColor: '#f59e0b' },
+  { label: 'Selesai', value: orders.value.filter(o => o.status === 'completed').length, badge: 'Done', icon: CheckCircleIcon, gradient: 'linear-gradient(135deg, #22c55e, #16a34a)', badgeBg: '#22c55e20', badgeColor: '#22c55e' },
+  { label: 'Dikerjakan', value: orders.value.filter(o => o.status === 'in_progress').length, badge: 'Aktif', icon: ClockIcon, gradient: 'linear-gradient(135deg, #3b82f6, #2563eb)', badgeBg: '#3b82f620', badgeColor: '#3b82f6' },
+])
+
+const orderStatus = computed(() => [
+  { label: 'Pending', value: orders.value.filter(o => o.status === 'pending').length, color: '#f59e0b' },
+  { label: 'Dikerjakan', value: orders.value.filter(o => o.status === 'in_progress').length, color: '#3b82f6' },
+  { label: 'Selesai', value: orders.value.filter(o => o.status === 'completed').length, color: '#22c55e' },
+  { label: 'Batal', value: orders.value.filter(o => o.status === 'cancelled').length, color: '#ef4444' },
+])
+
 const fitur = [
-  { icon: MapPinIcon, title: 'Bengkel Terdekat', desc: 'Temukan bengkel terpercaya di sekitar lokasi kamu dengan mudah', bg: '#22c55e20', color: '#22c55e' },
-  { icon: WrenchScrewdriverIcon, title: 'Mekanik Panggilan', desc: 'Mekanik profesional datang langsung ke lokasi kendaraan kamu', bg: '#f59e0b20', color: '#f59e0b' },
-  { icon: CubeIcon, title: 'Sparepart Lengkap', desc: 'Sparepart yang digunakan akan ditentukan mekanik sesuai kebutuhan kendaraan kamu', bg: '#3b82f620', color: '#3b82f6' },
+  { icon: MapPinIcon, title: 'Cari Bengkel', desc: 'Temukan bengkel terpercaya di sekitar kamu', gradient: 'linear-gradient(135deg, #22c55e, #16a34a)', path: '/customer/bengkel' },
+  { icon: WrenchScrewdriverIcon, title: 'Mekanik Panggilan', desc: 'Mekanik datang langsung ke lokasi kamu', gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', path: '/customer/order' },
+  { icon: CpuChipIcon, title: 'AI Diagnostic', desc: 'Analisa keluhan kendaraan dengan AI', gradient: 'linear-gradient(135deg, #a855f7, #7c3aed)', path: '/customer/ai-diagnostic' },
 ]
 
 const statusClass = (s) => ({
@@ -161,15 +215,15 @@ const statusClass = (s) => ({
   cancelled: 'bg-red-500/20 text-red-400',
 }[s] || 'bg-gray-500/20 text-gray-400')
 
-const formatRupiah = (v) => new Intl.NumberFormat('id-ID').format(v)
+const formatRupiah = (v) => new Intl.NumberFormat('id-ID').format(v || 0)
 
 onMounted(async () => {
   updateTime()
   timer = setInterval(updateTime, 1000)
   try {
     const res = await axios.get('/api/orders')
-    orders.value = res.data.data.data?.slice(0, 3) || []
-  } catch (err) { console.error(err) }
+    orders.value = res.data.data?.data?.slice(0, 3) || res.data.data?.slice(0, 3) || []
+  } catch (err) { orders.value = [] }
   finally { loading.value = false }
 })
 

@@ -1,87 +1,36 @@
-<template>
-  <div>
+﻿<template>
+  <div class="animate-fadein">
     <div class="mb-8">
-      <h1 class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--text-primary)` }"><UserIcon class="w-7 h-7" :style="{ color: `var(--accent)` }" /> Profil Mekanik</h1>
-      <p class="mt-1" :style="{ color: `var(--text-secondary)` }">Kelola informasi profil kamu</p>
+      <h1 class="text-2xl font-bold flex items-center gap-3" :style="{ color: 'var(--text-primary)' }">
+        <UserIcon class="w-7 h-7" :style="{ color: 'var(--accent)' }" />
+        Profil Saya
+      </h1>
+      <p class="mt-1 text-sm" :style="{ color: 'var(--text-secondary)' }">Kelola informasi akun mekanik</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="card flex flex-col items-center text-center py-8">
-        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-4" :style="{ backgroundColor: `var(--accent)` }">
-          <span class="text-4xl font-bold text-black">{{ userInitial }}</span>
+      <div class="card flex flex-col items-center py-8">
+        <div class="w-20 h-20 rounded-full flex items-center justify-center text-3xl font-bold mb-4" :style="{ backgroundColor: 'var(--accent)', color: '#000' }">
+          {{ userInitial }}
         </div>
-        <h2 class="text-xl font-bold mb-1" :style="{ color: `var(--text-primary)` }">{{ user.name }}</h2>
-        <span class="text-xs px-3 py-1 rounded-full font-medium mb-2" :style="{ backgroundColor: `var(--accent-soft)`, color: `var(--accent)` }">
-          Mekanik
-        </span>
-        <div class="flex items-center gap-1 mb-4">
-          <StarIcon class="w-4 h-4 text-yellow-400" />
-          <span class="text-sm font-medium" :style="{ color: `var(--text-primary)` }">{{ rating || '-' }}</span>
-          <span class="text-xs" :style="{ color: `var(--text-muted)` }">({{ totalRating }} ulasan)</span>
-        </div>
-        <p class="text-sm" :style="{ color: `var(--text-secondary)` }">{{ user.email }}</p>
+        <p class="font-semibold text-lg" :style="{ color: 'var(--text-primary)' }">{{ user.name }}</p>
+        <p class="text-sm mt-1" :style="{ color: 'var(--text-muted)' }">{{ user.email }}</p>
+        <span class="mt-3 text-xs px-3 py-1 rounded-full font-medium" style="background: #f5c51820; color: #f5c518;">Mekanik</span>
       </div>
 
       <div class="card md:col-span-2">
-        <h3 class="font-semibold mb-6 flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-          <UserIcon class="w-5 h-5" :style="{ color: `var(--accent)` }" />
-          Edit Informasi
-        </h3>
-
-        <div v-if="success" class="rounded-lg p-3 mb-4 text-sm flex items-center gap-2" style="background-color: #22c55e20; color: #22c55e;">
-          <CheckCircleIcon class="w-4 h-4" /> Profil berhasil diperbarui!
-        </div>
-        <div v-if="error" class="rounded-lg p-3 mb-4 text-sm" style="background-color: #ef444420; color: #ef4444;">
-          {{ error }}
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label class="block text-sm mb-2" :style="{ color: `var(--text-secondary)` }">Nama Lengkap</label>
-            <input v-model="form.name" type="text" class="input-field" />
+        <h2 class="font-semibold mb-6 text-sm" :style="{ color: 'var(--text-primary)' }">Informasi Akun</h2>
+        <div class="space-y-4">
+          <div v-for="field in fields" :key="field.label">
+            <label class="block text-xs font-medium mb-1.5" :style="{ color: 'var(--text-secondary)' }">{{ field.label }}</label>
+            <input v-model="form[field.key]" :type="field.type || 'text'" :disabled="field.disabled"
+              class="input-field text-sm w-full"
+              :style="field.disabled ? { opacity: 0.5 } : {}" />
           </div>
-          <div>
-            <label class="block text-sm mb-2" :style="{ color: `var(--text-secondary)` }">Email</label>
-            <input v-model="form.email" type="email" class="input-field" />
-          </div>
-          <div>
-            <label class="block text-sm mb-2" :style="{ color: `var(--text-secondary)` }">No. Telepon</label>
-            <input v-model="form.phone" type="tel" class="input-field" />
-          </div>
-          <div>
-            <label class="block text-sm mb-2" :style="{ color: `var(--text-secondary)` }">Keahlian</label>
-            <input v-model="form.expertise" type="text" placeholder="Mesin, AC, Kelistrikan..." class="input-field" />
-          </div>
-        </div>
-
-        <button @click="updateProfile" :disabled="loading" class="btn-primary px-6 py-2 rounded-lg flex items-center gap-2">
-          <ArrowPathIcon v-if="loading" class="w-4 h-4 animate-spin" />
-          <CheckIcon v-else class="w-4 h-4" />
-          {{ loading ? 'Menyimpan...' : 'Simpan Perubahan' }}
-        </button>
-
-        <div class="mt-8 pt-6" :style="{ borderTop: `1px solid var(--border)` }">
-          <h3 class="font-semibold mb-4 flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-            <LockClosedIcon class="w-5 h-5" :style="{ color: `var(--accent)` }" />
-            Ganti Password
-          </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-sm mb-2" :style="{ color: `var(--text-secondary)` }">Password Lama</label>
-              <input v-model="passForm.old_password" type="password" class="input-field" />
-            </div>
-            <div>
-              <label class="block text-sm mb-2" :style="{ color: `var(--text-secondary)` }">Password Baru</label>
-              <input v-model="passForm.new_password" type="password" class="input-field" />
-            </div>
-            <div>
-              <label class="block text-sm mb-2" :style="{ color: `var(--text-secondary)` }">Konfirmasi</label>
-              <input v-model="passForm.new_password_confirmation" type="password" class="input-field" />
-            </div>
-          </div>
-          <button @click="changePassword" :disabled="loadingPass" class="mt-4 px-6 py-2 rounded-lg flex items-center gap-2 text-sm font-medium border transition-all" :style="{ borderColor: `var(--accent)`, color: `var(--accent)` }">
-            <KeyIcon class="w-4 h-4" />
-            {{ loadingPass ? 'Memproses...' : 'Ganti Password' }}
+          <div v-if="successMsg" class="p-3 rounded-xl text-sm text-green-400 bg-green-500/10">{{ successMsg }}</div>
+          <div v-if="errorMsg" class="p-3 rounded-xl text-sm text-red-400 bg-red-500/10">{{ errorMsg }}</div>
+          <button @click="save" :disabled="saving" class="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold disabled:opacity-50">
+            {{ saving ? 'Menyimpan...' : 'Simpan Perubahan' }}
           </button>
         </div>
       </div>
@@ -90,64 +39,38 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import axios from 'axios'
-import {
-  UserIcon, LockClosedIcon, KeyIcon, CheckIcon,
-  ArrowPathIcon, CheckCircleIcon, StarIcon
-} from '@heroicons/vue/24/outline'
+import { UserIcon } from '@heroicons/vue/24/outline'
 
-const loading = ref(false)
-const loadingPass = ref(false)
-const success = ref(false)
-const error = ref('')
-const rating = ref(0)
-const totalRating = ref(0)
+const user = JSON.parse(localStorage.getItem('user') || '{}')
+const userInitial = computed(() => (user.name || 'M')[0].toUpperCase())
+const saving = ref(false)
+const successMsg = ref('')
+const errorMsg = ref('')
 
-const user = ref(JSON.parse(localStorage.getItem('user') || '{}'))
-const userInitial = computed(() => (user.value.name || 'M')[0].toUpperCase())
+const form = ref({ name: user.name || '', email: user.email || '', phone: user.phone || '' })
 
-const form = ref({ name: '', email: '', phone: '', expertise: '' })
-const passForm = ref({ old_password: '', new_password: '', new_password_confirmation: '' })
+const fields = [
+  { label: 'Nama Lengkap', key: 'name' },
+  { label: 'Email', key: 'email', type: 'email', disabled: true },
+  { label: 'No. Telepon', key: 'phone' },
+]
 
-onMounted(() => {
-  form.value = {
-    name: user.value.name || '',
-    email: user.value.email || '',
-    phone: user.value.phone || '',
-    expertise: user.value.expertise || '',
-  }
-})
-
-const updateProfile = async () => {
-  loading.value = true
-  error.value = ''
-  success.value = false
+const save = async () => {
+  saving.value = true
+  successMsg.value = ''
+  errorMsg.value = ''
   try {
-    const res = await axios.post('/api/profile/update', form.value)
-    localStorage.setItem('user', JSON.stringify(res.data.data.user))
-    user.value = res.data.data.user
-    success.value = true
-    setTimeout(() => success.value = false, 3000)
-  } catch (err) {
-    error.value = err.response?.data?.message || 'Gagal memperbarui profil'
+    const token = localStorage.getItem('token')
+    await axios.post('/api/profile/update', form.value, { headers: { Authorization: `Bearer ${token}` } })
+    user.name = form.value.name
+    localStorage.setItem('user', JSON.stringify(user))
+    successMsg.value = 'Profil berhasil diperbarui!'
+  } catch (e) {
+    errorMsg.value = 'Gagal menyimpan perubahan.'
   } finally {
-    loading.value = false
-  }
-}
-
-const changePassword = async () => {
-  loadingPass.value = true
-  error.value = ''
-  try {
-    await axios.post('/api/change-password', passForm.value)
-    passForm.value = { old_password: '', new_password: '', new_password_confirmation: '' }
-    success.value = true
-    setTimeout(() => success.value = false, 3000)
-  } catch (err) {
-    error.value = err.response?.data?.message || 'Gagal ganti password'
-  } finally {
-    loadingPass.value = false
+    saving.value = false
   }
 }
 </script>

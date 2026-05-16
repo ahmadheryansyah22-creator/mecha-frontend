@@ -1,8 +1,11 @@
-<template>
+﻿<template>
   <div>
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h1 class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--text-primary)` }"><BuildingStorefrontIcon class="w-7 h-7" :style="{ color: `var(--accent)` }" /> Bengkel</h1>
+        <h1 class="text-2xl font-bold flex items-center gap-3" :style="{ color: `var(--text-primary)` }">
+          <BuildingStorefrontIcon class="w-7 h-7" :style="{ color: `var(--accent)` }" />
+          Bengkel
+        </h1>
         <p class="mt-1" :style="{ color: `var(--text-secondary)` }">Kelola data bengkel</p>
       </div>
       <button @click="showModal = true" class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2">
@@ -93,7 +96,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { PlusIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon, BuildingStorefrontIcon } from '@heroicons/vue/24/outline'
 
 const loading = ref(true)
 const showModal = ref(false)

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="animate-fadein">
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
@@ -13,13 +13,13 @@
       </div>
       <div class="text-right hidden md:block">
         <p class="font-semibold text-sm" :style="{ color: 'var(--text-primary)' }">{{ currentDate }}</p>
-        <p class="text-xs mt-1" :style="{ color: 'var(--text-muted)' }">{{ currentTime }}</p>
+        <p class="text-2xl font-bold mt-1 tabular-nums" :style="{ color: 'var(--accent)' }">{{ currentTime }}</p>
       </div>
     </div>
 
     <!-- Stat Cards -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <div v-for="stat in stats" :key="stat.label" class="stat-card">
+      <div v-for="stat in stats" :key="stat.label" class="stat-card hover:scale-[1.02] transition-all duration-300">
         <div class="flex items-center justify-between mb-4">
           <div class="w-11 h-11 rounded-2xl flex items-center justify-center" :style="{ background: stat.gradient }">
             <component :is="stat.icon" class="w-5 h-5 text-white" />
@@ -33,23 +33,31 @@
       </div>
     </div>
 
-    <!-- Grid Bawah -->
+    <!-- Grid Tengah -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      <!-- Aksi Cepat -->
+
+      <!-- Statistik Bulan Ini -->
       <div class="card">
         <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
-          <BoltIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Aksi Cepat
+          <CalendarDaysIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" />
+          Statistik Bulan Ini
+          <span class="ml-auto text-xs px-2 py-0.5 rounded-full" :style="{ backgroundColor: 'var(--accent)20', color: 'var(--accent)' }">{{ currentMonth }}</span>
         </h2>
-        <div class="space-y-2">
-          <RouterLink v-for="a in quickActions" :key="a.path" :to="a.path"
-            class="flex items-center gap-3 px-3 py-3 rounded-xl transition-all hover:opacity-80 group"
-            :style="{ backgroundColor: 'var(--bg-primary)' }">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center" :style="{ background: a.gradient }">
-              <component :is="a.icon" class="w-4 h-4 text-white" />
+        <div class="space-y-3">
+          <div v-for="s in bulananStats" :key="s.label">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs" :style="{ color: 'var(--text-secondary)' }">{{ s.label }}</span>
+              <span class="text-xs font-bold" :style="{ color: s.color }">{{ s.display }}</span>
             </div>
-            <span class="text-sm font-medium flex-1" :style="{ color: 'var(--text-primary)' }">{{ a.label }}</span>
-            <ChevronRightIcon class="w-4 h-4 group-hover:translate-x-1 transition-transform" :style="{ color: 'var(--text-muted)' }" />
-          </RouterLink>
+            <div class="h-1.5 rounded-full overflow-hidden" :style="{ backgroundColor: 'var(--bg-primary)' }">
+              <div class="h-full rounded-full transition-all duration-700"
+                :style="{ width: s.pct + '%', backgroundColor: s.color }"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 flex items-center justify-between" :style="{ borderTop: '1px solid var(--border-color)' }">
+          <span class="text-xs" :style="{ color: 'var(--text-muted)' }">Total Transaksi Bulan Ini</span>
+          <span class="text-sm font-bold" :style="{ color: 'var(--accent)' }">Rp {{ formatRupiah(totalTransaksiBulan) }}</span>
         </div>
       </div>
 
@@ -65,28 +73,29 @@
             <span class="text-sm font-bold" :style="{ color: 'var(--text-primary)' }">{{ s.value }}</span>
           </div>
         </div>
-        <!-- Mini chart bar -->
-        <div class="mt-4 flex gap-1 h-2">
+        <div class="mt-4 flex gap-1 h-2 rounded-full overflow-hidden">
           <div v-for="s in orderStatus" :key="s.label"
-            class="rounded-full transition-all"
+            class="rounded-full transition-all duration-500"
             :style="{ backgroundColor: s.color, flex: Math.max(s.value, 0.5) }">
           </div>
         </div>
       </div>
 
-      <!-- Info Sistem -->
+      <!-- Ringkasan Bengkel -->
       <div class="card">
         <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
-          <InformationCircleIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Info Sistem
+          <BuildingStorefrontIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Ringkasan Bengkel
         </h2>
         <div class="space-y-3">
-          <div v-for="info in sysInfo" :key="info.label"
+          <div v-for="info in ringkasanBengkel" :key="info.label"
             class="flex items-center justify-between px-3 py-2.5 rounded-xl"
             :style="{ backgroundColor: 'var(--bg-primary)' }">
-            <span class="text-xs" :style="{ color: 'var(--text-secondary)' }">{{ info.label }}</span>
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full" :style="{ backgroundColor: info.bg, color: info.color }">
-              {{ info.value }}
-            </span>
+            <div class="flex items-center gap-2">
+              <component :is="info.icon" class="w-4 h-4 shrink-0" :style="{ color: info.color }" />
+              <span class="text-xs" :style="{ color: 'var(--text-secondary)' }">{{ info.label }}</span>
+            </div>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full"
+              :style="{ backgroundColor: info.bg, color: info.color }">{{ info.value }}</span>
           </div>
         </div>
       </div>
@@ -113,14 +122,18 @@
         <div v-for="order in orders" :key="order.id"
           class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all hover:opacity-80"
           :style="{ backgroundColor: 'var(--bg-primary)' }">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+            style="background: linear-gradient(135deg, #f59e0b, #d97706);">
             <ClipboardDocumentListIcon class="w-4 h-4 text-white" />
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-medium truncate" :style="{ color: 'var(--text-primary)' }">#{{ order.id }}</p>
-            <p class="text-xs truncate" :style="{ color: 'var(--text-muted)' }">{{ order.status }}</p>
+            <p class="text-xs truncate" :style="{ color: 'var(--text-muted)' }">{{ order.created_at?.slice(0,10) }}</p>
           </div>
-          <p class="text-sm font-semibold shrink-0" :style="{ color: 'var(--accent)' }">Rp {{ formatRupiah(order.total_price) }}</p>
+          <div class="text-right shrink-0">
+            <span class="text-xs px-2 py-1 rounded-full font-medium" :class="statusClass(order.status)">{{ order.status }}</span>
+            <p class="text-xs font-semibold mt-1" :style="{ color: 'var(--accent)' }">Rp {{ formatRupiah(order.total_price) }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -133,13 +146,14 @@ import { RouterLink } from 'vue-router'
 import axios from 'axios'
 import {
   Squares2X2Icon, BuildingStorefrontIcon, TruckIcon,
-  ClipboardDocumentListIcon, BanknotesIcon, BoltIcon,
-  ChevronRightIcon, ChartPieIcon, InformationCircleIcon,
-  WrenchIcon, CubeIcon,
+  ClipboardDocumentListIcon, BanknotesIcon, ChevronRightIcon,
+  ChartPieIcon, WrenchIcon, CubeIcon, CalendarDaysIcon,
+  CheckCircleIcon, ClockIcon, UserGroupIcon,
 } from '@heroicons/vue/24/outline'
 
 const loading = ref(true)
 const orders = ref([])
+const allOrders = ref([])
 const currentTime = ref('')
 const currentDate = ref('')
 let timer = null
@@ -154,11 +168,38 @@ const greeting = computed(() => {
   return 'malam'
 })
 
+const currentMonth = computed(() => new Date().toLocaleDateString('id-ID', { month: 'long' }))
+
 const updateTime = () => {
   const now = new Date()
   currentTime.value = now.toLocaleTimeString('id-ID')
   currentDate.value = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 }
+
+const ordersBulanIni = computed(() => {
+  const now = new Date()
+  return allOrders.value.filter(o => {
+    const d = new Date(o.created_at)
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+  })
+})
+
+const totalTransaksiBulan = computed(() =>
+  ordersBulanIni.value.filter(o => o.status === 'selesai' || o.status === 'completed')
+    .reduce((s, o) => s + (o.total_price || 0), 0)
+)
+
+const bulananStats = computed(() => {
+  const total = ordersBulanIni.value.length
+  const selesai = ordersBulanIni.value.filter(o => o.status === 'selesai' || o.status === 'completed').length
+  const proses = ordersBulanIni.value.filter(o => o.status === 'proses' || o.status === 'in_progress').length
+  return [
+    { label: 'Order Masuk', display: total, pct: Math.min(total * 5, 100), color: '#f59e0b' },
+    { label: 'Order Selesai', display: selesai, pct: total ? Math.round(selesai / total * 100) : 0, color: '#22c55e' },
+    { label: 'Sedang Dikerjakan', display: proses, pct: Math.min(proses * 10, 100), color: '#3b82f6' },
+    { label: 'Tingkat Selesai', display: (total ? Math.round(selesai / total * 100) : 0) + '%', pct: total ? Math.round(selesai / total * 100) : 0, color: '#a855f7' },
+  ]
+})
 
 const stats = ref([
   { label: 'Total Bengkel', value: 0, badge: 'Aktif', icon: BuildingStorefrontIcon, gradient: 'linear-gradient(135deg, #22c55e, #16a34a)', badgeBg: '#22c55e20', badgeColor: '#22c55e' },
@@ -167,24 +208,29 @@ const stats = ref([
   { label: 'Total Transaksi', value: 'Rp 0', badge: 'Bulan ini', icon: BanknotesIcon, gradient: 'linear-gradient(135deg, #a855f7, #7c3aed)', badgeBg: '#a855f720', badgeColor: '#a855f7' },
 ])
 
-const orderStatus = ref([
-  { label: 'Pending', value: 0, color: '#f59e0b' },
-  { label: 'Dikerjakan', value: 0, color: '#3b82f6' },
-  { label: 'Selesai', value: 0, color: '#22c55e' },
-  { label: 'Dibatalkan', value: 0, color: '#ef4444' },
+const orderStatus = computed(() => [
+  { label: 'Pending', value: allOrders.value.filter(o => o.status === 'pending').length, color: '#f59e0b' },
+  { label: 'Dikerjakan', value: allOrders.value.filter(o => o.status === 'proses' || o.status === 'in_progress').length, color: '#3b82f6' },
+  { label: 'Selesai', value: allOrders.value.filter(o => o.status === 'selesai' || o.status === 'completed').length, color: '#22c55e' },
+  { label: 'Dibatalkan', value: allOrders.value.filter(o => o.status === 'batal' || o.status === 'cancelled').length, color: '#ef4444' },
 ])
 
-const quickActions = [
-  { label: 'Tambah Order', path: '/order', icon: ClipboardDocumentListIcon, gradient: 'linear-gradient(135deg, #f59e0b, #d97706)' },
-  { label: 'Daftar Mekanik', path: '/mekanik', icon: WrenchIcon, gradient: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
-  { label: 'Stok Sparepart', path: '/sparepart', icon: CubeIcon, gradient: 'linear-gradient(135deg, #22c55e, #16a34a)' },
-]
+const ringkasanBengkel = computed(() => [
+  { label: 'Order Hari Ini', value: allOrders.value.filter(o => o.created_at?.slice(0,10) === new Date().toISOString().slice(0,10)).length, bg: '#f59e0b20', color: '#f59e0b', icon: ClipboardDocumentListIcon },
+  { label: 'Menunggu Dikerjakan', value: allOrders.value.filter(o => o.status === 'pending').length, bg: '#3b82f620', color: '#3b82f6', icon: ClockIcon },
+  { label: 'Selesai Hari Ini', value: allOrders.value.filter(o => (o.status === 'selesai' || o.status === 'completed') && o.updated_at?.slice(0,10) === new Date().toISOString().slice(0,10)).length, bg: '#22c55e20', color: '#22c55e', icon: CheckCircleIcon },
+  { label: 'Total Mekanik', value: stats.value[0].mekanikCount || 0, bg: '#a855f720', color: '#a855f7', icon: UserGroupIcon },
+])
 
-const sysInfo = [
-  { label: 'Versi MECHA', value: 'v1.0.0', bg: '#22c55e20', color: '#22c55e' },
-  { label: 'Status Server', value: 'Online', bg: '#3b82f620', color: '#3b82f6' },
-  { label: 'Database', value: 'Connected', bg: '#a855f720', color: '#a855f7' },
-]
+const statusClass = (s) => ({
+  pending: 'bg-yellow-500/20 text-yellow-400',
+  proses: 'bg-blue-500/20 text-blue-400',
+  in_progress: 'bg-blue-500/20 text-blue-400',
+  selesai: 'bg-green-500/20 text-green-400',
+  completed: 'bg-green-500/20 text-green-400',
+  batal: 'bg-red-500/20 text-red-400',
+  cancelled: 'bg-red-500/20 text-red-400',
+}[s] || 'bg-gray-500/20 text-gray-400')
 
 const formatRupiah = (v) => new Intl.NumberFormat('id-ID').format(v || 0)
 
@@ -192,19 +238,23 @@ onMounted(async () => {
   updateTime()
   timer = setInterval(updateTime, 1000)
   try {
-    const [bRes, vRes, oRes] = await Promise.all([
+    const [bRes, vRes, oRes, mRes] = await Promise.all([
       axios.get('/api/bengkels'),
       axios.get('/api/vehicles'),
       axios.get('/api/orders'),
+      axios.get('/api/mechanics'),
     ])
-    stats.value[0].value = bRes.data.data?.total || 0
-    stats.value[1].value = vRes.data.data?.total || 0
+    stats.value[0].value = bRes.data.data?.total || bRes.data.data?.length || 0
+    stats.value[1].value = vRes.data.data?.total || vRes.data.data?.length || 0
     stats.value[2].value = oRes.data.data?.total || 0
-    orders.value = oRes.data.data?.data?.slice(0, 5) || []
-    orderStatus.value[0].value = orders.value.filter(o => o.status === 'pending').length
-    orderStatus.value[1].value = orders.value.filter(o => o.status === 'in_progress').length
-    orderStatus.value[2].value = orders.value.filter(o => o.status === 'completed').length
-    orderStatus.value[3].value = orders.value.filter(o => o.status === 'cancelled').length
+
+    allOrders.value = oRes.data.data?.data || oRes.data.data || []
+    orders.value = allOrders.value.slice(0, 5)
+
+    const totalTrx = allOrders.value.filter(o => o.status === 'selesai' || o.status === 'completed')
+      .reduce((s, o) => s + (o.total_price || 0), 0)
+    stats.value[3].value = 'Rp ' + formatRupiah(totalTrx)
+    stats.value[0].mekanikCount = mRes.data.data?.total || mRes.data.data?.length || 0
   } catch (err) {
     console.error(err)
   } finally {

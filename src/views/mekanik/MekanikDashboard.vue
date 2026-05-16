@@ -1,122 +1,139 @@
-<template>
-  <div>
-    <div class="mb-8 flex items-center justify-between">
+﻿<template>
+  <div class="animate-fadein">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
       <div>
-        <h1 class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-          <HomeIcon class="w-7 h-7" :style="{ color: `var(--accent)` }" />
+        <h1 class="text-2xl font-bold flex items-center gap-3" :style="{ color: 'var(--text-primary)' }">
+          <HomeIcon class="w-7 h-7" :style="{ color: 'var(--accent)' }" />
           Dashboard Mekanik
         </h1>
-        <p class="mt-1 text-sm" :style="{ color: `var(--text-secondary)` }">{{ greeting }}, {{ userName }}! Siap bekerja hari ini?</p>
+        <p class="mt-1 text-sm" :style="{ color: 'var(--text-secondary)' }">
+          Selamat {{ greeting }}, {{ userName }}! Siap bekerja hari ini?
+        </p>
       </div>
-      <div class="text-right">
-        <p class="text-sm font-medium" :style="{ color: `var(--text-primary)` }">{{ currentDate }}</p>
-        <p class="text-xs" :style="{ color: `var(--text-muted)` }">{{ currentTime }}</p>
+      <div class="text-right hidden md:block">
+        <p class="font-semibold text-sm" :style="{ color: 'var(--text-primary)' }">{{ currentDate }}</p>
+        <p class="text-2xl font-bold mt-1 tabular-nums" :style="{ color: 'var(--accent)' }">{{ currentTime }}</p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <div v-for="stat in stats" :key="stat.label" class="card hover:scale-[1.02] transition-transform cursor-default">
-        <div class="flex items-center justify-between mb-4">
-          <div class="w-12 h-12 rounded-2xl flex items-center justify-center" :style="{ backgroundColor: stat.bg }">
-            <component :is="stat.icon" class="w-6 h-6" :style="{ color: stat.color }" />
-          </div>
-          <span class="text-xs px-2 py-1 rounded-full font-medium" :style="{ backgroundColor: stat.bg, color: stat.color }">{{ stat.badge }}</span>
+    <!-- Stat Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div v-for="stat in stats" :key="stat.label"
+        class="card flex items-center gap-4 hover:scale-[1.02] transition-all duration-300">
+        <div class="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" :style="{ background: stat.gradient }">
+          <component :is="stat.icon" class="w-5 h-5 text-white" />
         </div>
-        <p class="text-3xl font-bold" :style="{ color: `var(--text-primary)` }">{{ stat.value }}</p>
-        <p class="text-sm mt-1" :style="{ color: `var(--text-secondary)` }">{{ stat.label }}</p>
+        <div>
+          <p class="text-2xl font-bold" :style="{ color: 'var(--text-primary)' }">{{ stat.value }}</p>
+          <p class="text-xs" :style="{ color: 'var(--text-secondary)' }">{{ stat.label }}</p>
+        </div>
+        <span class="ml-auto text-xs px-2 py-1 rounded-full font-medium shrink-0"
+          :style="{ backgroundColor: stat.badgeBg, color: stat.badgeColor }">{{ stat.badge }}</span>
       </div>
     </div>
 
+    <!-- Grid Tengah -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+
+      <!-- Statistik Bulan Ini -->
       <div class="card">
-        <h2 class="font-semibold mb-4 flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-          <BoltIcon class="w-5 h-5" :style="{ color: `var(--accent)` }" />
-          Aksi Cepat
+        <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
+          <CalendarDaysIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" />
+          Statistik Bulan Ini
+          <span class="ml-auto text-xs px-2 py-0.5 rounded-full" :style="{ backgroundColor: 'var(--accent)20', color: 'var(--accent)' }">{{ currentMonth }}</span>
         </h2>
-        <div class="space-y-2">
-          <RouterLink v-for="action in quickActions" :key="action.path" :to="action.path"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all hover:opacity-80"
-            :style="{ backgroundColor: `var(--bg-primary)` }">
-            <div class="w-8 h-8 rounded-lg flex items-center justify-center" :style="{ backgroundColor: action.bg }">
-              <component :is="action.icon" class="w-4 h-4" :style="{ color: action.color }" />
+        <div class="space-y-3">
+          <div v-for="s in bulananStats" :key="s.label">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs" :style="{ color: 'var(--text-secondary)' }">{{ s.label }}</span>
+              <span class="text-xs font-bold" :style="{ color: s.color }">{{ s.display }}</span>
             </div>
-            <span class="text-sm font-medium" :style="{ color: `var(--text-primary)` }">{{ action.label }}</span>
-            <ChevronRightIcon class="w-4 h-4 ml-auto" :style="{ color: `var(--text-muted)` }" />
-          </RouterLink>
+            <div class="h-1.5 rounded-full overflow-hidden" :style="{ backgroundColor: 'var(--bg-primary)' }">
+              <div class="h-full rounded-full transition-all duration-700"
+                :style="{ width: s.pct + '%', backgroundColor: s.color }"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 flex items-center justify-between" :style="{ borderTop: '1px solid var(--border-color)' }">
+          <span class="text-xs" :style="{ color: 'var(--text-muted)' }">Est. Pendapatan</span>
+          <span class="text-sm font-bold" :style="{ color: 'var(--accent)' }">Rp {{ formatRupiah(estPendapatan) }}</span>
         </div>
       </div>
 
+      <!-- Status Order -->
       <div class="card">
-        <h2 class="font-semibold mb-4 flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-          <ChartPieIcon class="w-5 h-5" :style="{ color: `var(--accent)` }" />
-          Status Order
+        <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
+          <ChartPieIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Status Order
         </h2>
         <div class="space-y-3">
           <div v-for="s in orderStatus" :key="s.label" class="flex items-center gap-3">
-            <div class="w-3 h-3 rounded-full shrink-0" :style="{ backgroundColor: s.color }"></div>
-            <span class="text-sm flex-1" :style="{ color: `var(--text-secondary)` }">{{ s.label }}</span>
-            <span class="text-sm font-bold" :style="{ color: `var(--text-primary)` }">{{ s.value }}</span>
+            <div class="w-2.5 h-2.5 rounded-full shrink-0" :style="{ backgroundColor: s.color }"></div>
+            <span class="text-sm flex-1" :style="{ color: 'var(--text-secondary)' }">{{ s.label }}</span>
+            <span class="text-sm font-bold" :style="{ color: 'var(--text-primary)' }">{{ s.value }}</span>
+          </div>
+        </div>
+        <div class="mt-4 flex gap-1 h-2 rounded-full overflow-hidden">
+          <div v-for="s in orderStatus" :key="s.label"
+            class="rounded-full transition-all duration-500"
+            :style="{ backgroundColor: s.color, flex: Math.max(s.value, 0.5) }">
           </div>
         </div>
       </div>
 
+      <!-- Ringkasan -->
       <div class="card">
-        <h2 class="font-semibold mb-4 flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-          <BanknotesIcon class="w-5 h-5" :style="{ color: `var(--accent)` }" />
-          Ringkasan Penghasilan
+        <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
+          <ClipboardDocumentListIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Ringkasan
         </h2>
         <div class="space-y-3">
-          <div class="p-4 rounded-xl" :style="{ backgroundColor: `var(--bg-primary)` }">
-            <p class="text-xs mb-1" :style="{ color: `var(--text-muted)` }">Total Order Selesai</p>
-            <p class="text-2xl font-bold" :style="{ color: `var(--accent)` }">{{ orders.filter(o => o.status === 'completed').length }}</p>
+          <div v-for="info in ringkasan" :key="info.label"
+            class="flex items-center justify-between px-3 py-2.5 rounded-xl"
+            :style="{ backgroundColor: 'var(--bg-primary)' }">
+            <div class="flex items-center gap-2">
+              <component :is="info.icon" class="w-4 h-4" :style="{ color: info.color }" />
+              <span class="text-xs" :style="{ color: 'var(--text-secondary)' }">{{ info.label }}</span>
+            </div>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full"
+              :style="{ backgroundColor: info.bg, color: info.color }">{{ info.value }}</span>
           </div>
-          <div class="p-4 rounded-xl" :style="{ backgroundColor: `var(--bg-primary)` }">
-            <p class="text-xs mb-1" :style="{ color: `var(--text-muted)` }">Order Bulan Ini</p>
-            <p class="text-2xl font-bold" style="color: #3b82f6;">{{ ordersThisMonth }}</p>
-          </div>
-          <RouterLink to="/portal-mekanik/penghasilan"
-            class="flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-medium"
-            :style="{ backgroundColor: `var(--accent)`, color: `#000` }">
-            <BanknotesIcon class="w-4 h-4" /> Lihat Detail
-          </RouterLink>
         </div>
       </div>
     </div>
 
+    <!-- Order Terbaru -->
     <div class="card">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="font-semibold flex items-center gap-2" :style="{ color: `var(--text-primary)` }">
-          <ClipboardDocumentListIcon class="w-5 h-5" :style="{ color: `var(--accent)` }" />
-          Order Terbaru
+        <h2 class="font-semibold flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
+          <ClipboardDocumentListIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Order Terbaru
         </h2>
-        <RouterLink to="/portal-mekanik/order" class="text-sm font-medium flex items-center gap-1" :style="{ color: `var(--accent)` }">
-          Lihat semua <ChevronRightIcon class="w-4 h-4" />
-        </RouterLink>
+        <button @click="$router.push('/portal-mekanik/order')"
+          class="text-xs font-medium flex items-center gap-1 hover:opacity-70 transition-all"
+          :style="{ color: 'var(--accent)' }">
+          Lihat semua <ChevronRightIcon class="w-3 h-3" />
+        </button>
       </div>
-
-      <div v-if="loading" class="text-center py-12">
-        <div class="w-8 h-8 border-2 rounded-full animate-spin mx-auto mb-3" :style="{ borderColor: `var(--accent)`, borderTopColor: `transparent` }"></div>
-        <p class="text-sm" :style="{ color: `var(--text-muted)` }">Memuat data...</p>
+      <div v-if="loading" class="text-center py-8">
+        <div class="w-6 h-6 border-2 rounded-full animate-spin mx-auto"
+          :style="{ borderColor: 'var(--accent)', borderTopColor: 'transparent' }"></div>
       </div>
-
-      <div v-else-if="orders.length === 0" class="text-center py-12">
-        <ClipboardDocumentListIcon class="w-16 h-16 mx-auto mb-4" :style="{ color: `var(--text-muted)` }" />
-        <p class="font-medium mb-1" :style="{ color: `var(--text-primary)` }">Belum ada order</p>
-        <p class="text-sm" :style="{ color: `var(--text-muted)` }">Order baru akan muncul di sini</p>
+      <div v-else-if="orders.length === 0" class="text-center py-10">
+        <ClipboardDocumentListIcon class="w-12 h-12 mx-auto mb-3 opacity-20" :style="{ color: 'var(--text-muted)' }" />
+        <p class="text-sm" :style="{ color: 'var(--text-muted)' }">Belum ada order</p>
       </div>
-
-      <div v-else class="space-y-3">
-        <div v-for="order in orders.slice(0, 5)" :key="order.id"
-          class="flex items-center gap-4 p-4 rounded-xl"
-          :style="{ backgroundColor: `var(--bg-primary)` }">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background-color: #f59e0b20;">
-            <ClipboardDocumentListIcon class="w-5 h-5" style="color: #f59e0b;" />
+      <div v-else class="space-y-2">
+        <div v-for="order in orders.slice(0,5)" :key="order.id"
+          class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all hover:opacity-80"
+          :style="{ backgroundColor: 'var(--bg-primary)' }">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+            style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <ClipboardDocumentListIcon class="w-4 h-4 text-white" />
           </div>
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold truncate" :style="{ color: `var(--text-primary)` }">#{{ order.order_number || order.id }}</p>
-            <p class="text-xs truncate" :style="{ color: `var(--text-muted)` }">{{ order.created_at?.slice(0,10) }}</p>
+            <p class="text-sm font-medium truncate" :style="{ color: 'var(--text-primary)' }">#{{ order.id }} - {{ order.vehicle?.license_plate || 'Kendaraan' }}</p>
+            <p class="text-xs truncate" :style="{ color: 'var(--text-muted)' }">{{ order.created_at?.slice(0,10) }}</p>
           </div>
-          <span class="text-xs px-3 py-1 rounded-full font-medium shrink-0" :style="getStatusStyle(order.status)">{{ order.status }}</span>
+          <span class="text-xs px-2 py-1 rounded-full font-medium shrink-0" :class="statusClass(order.status)">{{ order.status }}</span>
         </div>
       </div>
     </div>
@@ -124,88 +141,96 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue"
-import { RouterLink } from "vue-router"
-import axios from "axios"
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import axios from 'axios'
 import {
-  HomeIcon, ClipboardDocumentListIcon, CheckCircleIcon,
-  ClockIcon, TruckIcon, BoltIcon, ChevronRightIcon,
-  ChartPieIcon, BanknotesIcon,
-} from "@heroicons/vue/24/outline"
+  HomeIcon, ClipboardDocumentListIcon, TruckIcon, CheckCircleIcon,
+  BanknotesIcon, ChevronRightIcon, ChartPieIcon, WrenchIcon,
+  CpuChipIcon, UserIcon, CalendarDaysIcon, ClockIcon, FireIcon,
+} from '@heroicons/vue/24/outline'
 
-const user = JSON.parse(localStorage.getItem("user") || "{}")
-const userName = computed(() => user.name || "Mekanik")
-const orders = ref([])
 const loading = ref(true)
-const currentTime = ref("")
-const currentDate = ref("")
+const orders = ref([])
+const currentTime = ref('')
+const currentDate = ref('')
 let timer = null
 
+const user = JSON.parse(localStorage.getItem('user') || '{}')
+const userName = computed(() => user.name?.split(' ')[0] || 'Mekanik')
 const greeting = computed(() => {
   const h = new Date().getHours()
-  if (h < 12) return "Selamat pagi"
-  if (h < 15) return "Selamat siang"
-  if (h < 18) return "Selamat sore"
-  return "Selamat malam"
+  if (h < 12) return 'pagi'
+  if (h < 15) return 'siang'
+  if (h < 18) return 'sore'
+  return 'malam'
 })
+
+const currentMonth = computed(() => new Date().toLocaleDateString('id-ID', { month: 'long' }))
 
 const updateTime = () => {
   const now = new Date()
-  currentTime.value = now.toLocaleTimeString("id-ID")
-  currentDate.value = now.toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })
+  currentTime.value = now.toLocaleTimeString('id-ID')
+  currentDate.value = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 }
 
+// Filter order bulan ini
+const ordersBulanIni = computed(() => {
+  const now = new Date()
+  return orders.value.filter(o => {
+    const d = new Date(o.created_at)
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+  })
+})
+
+const totalBulanIni = computed(() => ordersBulanIni.value.length)
+const selesaiBulanIni = computed(() => ordersBulanIni.value.filter(o => o.status === 'selesai').length)
+const prosesBulanIni = computed(() => ordersBulanIni.value.filter(o => o.status === 'proses').length)
+const estPendapatan = computed(() => ordersBulanIni.value.filter(o => o.status === 'selesai').reduce((s, o) => s + (o.total_price || 0), 0))
+
+const bulananStats = computed(() => [
+  { label: 'Total Order Masuk', display: totalBulanIni.value, pct: Math.min(totalBulanIni.value * 10, 100), color: '#f59e0b' },
+  { label: 'Order Selesai', display: selesaiBulanIni.value, pct: totalBulanIni.value ? Math.round(selesaiBulanIni.value / totalBulanIni.value * 100) : 0, color: '#22c55e' },
+  { label: 'Sedang Dikerjakan', display: prosesBulanIni.value, pct: Math.min(prosesBulanIni.value * 10, 100), color: '#3b82f6' },
+  { label: 'Tingkat Selesai', display: (totalBulanIni.value ? Math.round(selesaiBulanIni.value / totalBulanIni.value * 100) : 0) + '%', pct: totalBulanIni.value ? Math.round(selesaiBulanIni.value / totalBulanIni.value * 100) : 0, color: '#a855f7' },
+])
+
 const stats = computed(() => [
-  { label: "Total Order", value: orders.value.length, badge: "Semua", icon: ClipboardDocumentListIcon, bg: "#f59e0b20", color: "#f59e0b" },
-  { label: "Sedang Dikerjakan", value: orders.value.filter(o => o.status === "in_progress").length, badge: "Aktif", icon: ClockIcon, bg: "#3b82f620", color: "#3b82f6" },
-  { label: "Selesai", value: orders.value.filter(o => o.status === "completed").length, badge: "Done", icon: CheckCircleIcon, bg: "#22c55e20", color: "#22c55e" },
-  { label: "Kendaraan", value: new Set(orders.value.map(o => o.vehicle_id)).size, badge: "Unik", icon: TruckIcon, bg: "#a855f720", color: "#a855f7" },
+  { label: 'Total Order', value: orders.value.length, badge: 'Semua', icon: ClipboardDocumentListIcon, gradient: 'linear-gradient(135deg, #f59e0b, #d97706)', badgeBg: '#f59e0b20', badgeColor: '#f59e0b' },
+  { label: 'Dikerjakan', value: orders.value.filter(o => o.status === 'proses').length, badge: 'Aktif', icon: WrenchIcon, gradient: 'linear-gradient(135deg, #3b82f6, #2563eb)', badgeBg: '#3b82f620', badgeColor: '#3b82f6' },
+  { label: 'Selesai', value: orders.value.filter(o => o.status === 'selesai').length, badge: 'Done', icon: CheckCircleIcon, gradient: 'linear-gradient(135deg, #22c55e, #16a34a)', badgeBg: '#22c55e20', badgeColor: '#22c55e' },
+  { label: 'Kendaraan', value: new Set(orders.value.map(o => o.vehicle_id)).size, badge: 'Unik', icon: TruckIcon, gradient: 'linear-gradient(135deg, #a855f7, #7c3aed)', badgeBg: '#a855f720', badgeColor: '#a855f7' },
 ])
 
 const orderStatus = computed(() => [
-  { label: "Pending", value: orders.value.filter(o => o.status === "pending").length, color: "#f59e0b" },
-  { label: "Sedang Dikerjakan", value: orders.value.filter(o => o.status === "in_progress").length, color: "#3b82f6" },
-  { label: "Selesai", value: orders.value.filter(o => o.status === "completed").length, color: "#22c55e" },
-  { label: "Dibatalkan", value: orders.value.filter(o => o.status === "cancelled").length, color: "#ef4444" },
+  { label: 'Pending', value: orders.value.filter(o => o.status === 'pending').length, color: '#f59e0b' },
+  { label: 'Dikerjakan', value: orders.value.filter(o => o.status === 'proses').length, color: '#3b82f6' },
+  { label: 'Selesai', value: orders.value.filter(o => o.status === 'selesai').length, color: '#22c55e' },
+  { label: 'Batal', value: orders.value.filter(o => o.status === 'batal').length, color: '#ef4444' },
 ])
 
-const ordersThisMonth = computed(() => {
-  const now = new Date()
-  return orders.value.filter(o => {
-    if (!o.created_at) return false
-    const d = new Date(o.created_at)
-    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-  }).length
-})
+const ringkasan = computed(() => [
+  { label: 'Status Kerja', value: 'Aktif', bg: '#22c55e20', color: '#22c55e', icon: CheckCircleIcon },
+  { label: 'Order Hari Ini', value: orders.value.filter(o => o.created_at?.slice(0,10) === new Date().toISOString().slice(0,10)).length, bg: '#f59e0b20', color: '#f59e0b', icon: ClockIcon },
+  { label: 'Bulan Ini', value: totalBulanIni.value, bg: '#3b82f620', color: '#3b82f6', icon: CalendarDaysIcon },
+  { label: 'Role', value: 'Mekanik', bg: '#a855f720', color: '#a855f7', icon: UserIcon },
+])
 
-const quickActions = [
-  { label: "Lihat Order Masuk", path: "/portal-mekanik/order", icon: ClipboardDocumentListIcon, bg: "#f59e0b20", color: "#f59e0b" },
-  { label: "Data Kendaraan", path: "/portal-mekanik/kendaraan", icon: TruckIcon, bg: "#3b82f620", color: "#3b82f6" },
-  { label: "Penghasilan Saya", path: "/portal-mekanik/penghasilan", icon: BanknotesIcon, bg: "#22c55e20", color: "#22c55e" },
-]
+const formatRupiah = (v) => new Intl.NumberFormat('id-ID').format(v || 0)
 
-const getStatusStyle = (status) => {
-  const map = {
-    pending: { backgroundColor: "#f59e0b20", color: "#f59e0b" },
-    in_progress: { backgroundColor: "#3b82f620", color: "#3b82f6" },
-    completed: { backgroundColor: "#22c55e20", color: "#22c55e" },
-    cancelled: { backgroundColor: "#ef444420", color: "#ef4444" },
-  }
-  return map[status] || { backgroundColor: "#6b728020", color: "#6b7280" }
+const statusClass = (s) => {
+  const m = { proses: 'bg-yellow-500/20 text-yellow-400', selesai: 'bg-green-500/20 text-green-400', pending: 'bg-blue-500/20 text-blue-400', batal: 'bg-red-500/20 text-red-400' }
+  return m[s] || 'bg-gray-500/20 text-gray-400'
 }
 
 onMounted(async () => {
   updateTime()
   timer = setInterval(updateTime, 1000)
   try {
-    const token = localStorage.getItem("token")
-    const res = await axios.get("/api/orders", { headers: { Authorization: `Bearer ${token}` } })
+    const token = localStorage.getItem('token')
+    const res = await axios.get('/api/orders', { headers: { Authorization: `Bearer ${token}` } })
     orders.value = res.data.data?.data || res.data.data || []
-  } catch (e) {
-    orders.value = []
-  } finally {
-    loading.value = false
-  }
+  } catch (e) { orders.value = [] }
+  finally { loading.value = false }
 })
 
 onUnmounted(() => clearInterval(timer))

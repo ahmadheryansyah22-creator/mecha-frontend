@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div :class="isDark ? 'dark' : 'light'" class="min-h-screen flex" :style="{ backgroundColor: 'var(--bg-primary)' }">
     <div class="hidden lg:flex flex-col w-1/2 px-12 relative overflow-hidden" style="background: linear-gradient(135deg, #0a0a0f 0%, #1a1a0a 50%, #0f0f0a 100%); min-height: 100vh; justify-content: center; align-items: flex-start; padding-top: 0px;">
       <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full blur-3xl opacity-20" style="background: radial-gradient(circle, #f5c518, transparent);"></div>
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <p class="absolute bottom-8 left-12 text-gray-600 text-xs">ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© 2026 MECHA. All rights reserved.</p>
+      <p class="absolute bottom-8 left-12 text-gray-600 text-xs">© 2026 MECHA. All rights reserved.</p>
     </div>
     <div class="flex-1 flex items-center justify-center px-6 py-8 overflow-y-auto">
       <div class="w-full max-w-md">
