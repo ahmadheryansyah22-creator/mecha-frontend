@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="animate-fadein">
     <div class="mb-8">
       <h1 class="text-2xl font-bold flex items-center gap-3" :style="{ color: `var(--text-primary)` }">
@@ -19,16 +19,16 @@
     </div>
 
     <!-- Search -->
-    <div class="relative mb-6">
+    <div class="relative mb-6" style="position:relative">
       <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" :style="{ color: `var(--text-muted)` }" />
       <input v-model="search" type="text"
         :placeholder="activeType === 'bengkel' ? 'Cari nama bengkel atau kota...' : 'Cari nama atau keahlian mekanik...'"
-        class="input-field pl-9" />
+        class="input-field" style="padding-left: 2.25rem;" />
     </div>
 
     <!-- Bengkel List -->
     <div v-if="activeType === 'bengkel'">
-      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div v-for="i in 4" :key="i" class="card animate-pulse">
           <div class="h-4 rounded mb-3" :style="{ backgroundColor: `var(--border-color)` }"></div>
           <div class="h-3 rounded w-2/3 mb-2" :style="{ backgroundColor: `var(--border-color)` }"></div>
@@ -40,7 +40,7 @@
         <p class="font-medium" :style="{ color: `var(--text-primary)` }">Tidak ada bengkel ditemukan</p>
         <p class="text-sm mt-1" :style="{ color: `var(--text-muted)` }">Coba kata kunci lain</p>
       </div>
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div v-for="b in filteredBengkels" :key="b.id"
           class="card hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 cursor-pointer group">
           <div class="flex items-start justify-between mb-4">
@@ -57,9 +57,17 @@
           <p class="text-xs mb-1 flex items-center gap-1" :style="{ color: `var(--text-secondary)` }">
             <MapPinIcon class="w-3 h-3 shrink-0" /> {{ b.city }}, {{ b.province }}
           </p>
-          <p class="text-xs mb-4 flex items-center gap-1" :style="{ color: `var(--text-secondary)` }">
+          <p class="text-xs mb-2 flex items-center gap-1" :style="{ color: `var(--text-secondary)` }">
             <PhoneIcon class="w-3 h-3 shrink-0" /> {{ b.phone }}
           </p>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-xs px-2 py-1 rounded-full flex items-center gap-1" style="background:#f5c51820;color:#f5c518">
+              ⭐ 4.8
+            </span>
+            <span class="text-xs px-2 py-1 rounded-full" style="background:#22c55e20;color:#22c55e">
+              Buka 24 Jam
+            </span>
+          </div>
           <div class="flex items-center justify-between pt-3" :style="{ borderTop: `1px solid var(--border-color)` }">
             <p class="text-xs" :style="{ color: `var(--text-muted)` }">{{ b.owner_name }}</p>
             <button @click="pilihBengkel(b)"
@@ -73,7 +81,7 @@
 
     <!-- Mekanik List -->
     <div v-if="activeType === 'mekanik'">
-      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div v-for="i in 4" :key="i" class="card animate-pulse">
           <div class="flex gap-3 mb-3">
             <div class="w-14 h-14 rounded-2xl" :style="{ backgroundColor: `var(--border-color)` }"></div>
@@ -88,7 +96,7 @@
         <WrenchScrewdriverIcon class="w-14 h-14 mx-auto mb-4 opacity-30" :style="{ color: `var(--text-muted)` }" />
         <p class="font-medium" :style="{ color: `var(--text-primary)` }">Tidak ada mekanik ditemukan</p>
       </div>
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div v-for="m in filteredMechanics" :key="m.id"
           class="card hover:scale-[1.02] hover:-translate-y-1 transition-all duration-300 group">
           <div class="flex items-center gap-4 mb-4">
@@ -132,12 +140,12 @@
           </div>
           <button @click="showModal = false"
             class="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-red-500/20 transition-all"
-            :style="{ color: `var(--text-muted)` }">✕</button>
+            :style="{ color: `var(--text-muted)` }">âœ•</button>
         </div>
 
         <div v-if="error" class="mb-4 p-3 rounded-xl text-xs flex items-center gap-2"
           style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#ef4444">
-          ⚠️ {{ error }}
+          âš ï¸ {{ error }}
         </div>
 
         <div class="space-y-3">
@@ -259,3 +267,5 @@ onMounted(async () => {
   finally { loading.value = false }
 })
 </script>
+
+

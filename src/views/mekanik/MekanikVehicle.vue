@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="animate-fadein">
     <div class="mb-8 flex items-center justify-between">
       <div>
@@ -15,7 +15,7 @@
     <!-- Search -->
     <div class="relative mb-6">
       <MagnifyingGlassIcon class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" :style="{ color: `var(--text-muted)` }" />
-      <input v-model="search" type="text" placeholder="Cari plat nomor atau merek..." class="input-field pl-9" />
+      <input v-model="search" type="text" placeholder="Cari plat nomor atau merek..." class="input-field" style="padding-left:2.5rem !important" />
     </div>
 
     <div class="card">

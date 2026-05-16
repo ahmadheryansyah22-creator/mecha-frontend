@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -92,6 +92,7 @@ body {
   border: 1px solid var(--input-border);
   border-radius: 0.875rem;
   padding: 0.75rem 1rem;
+    padding-left: 1rem;
   color: var(--text-primary);
   font-size: 0.875rem;
   transition: all 0.2s ease;
@@ -214,3 +215,56 @@ th { font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spa
 /* Sidebar active item tetap kuning dengan teks hitam - sudah ok */
 /* Navbar MECHA title di light mode */
 .light .sidebar-logo-text { color: #7a4f00 !important; }
+
+/* ===== SKELETON LOADING ===== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--border-color) 25%, var(--bg-secondary) 50%, var(--border-color) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}
+.skeleton-card {
+  background-color: var(--bg-card);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+/* ===== FADE IN ANIMATION ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadein {
+  animation: fadeInUp 0.4s ease forwards;
+}
+.animate-fadein-delay-1 { animation: fadeInUp 0.4s ease 0.1s both; }
+.animate-fadein-delay-2 { animation: fadeInUp 0.4s ease 0.2s both; }
+.animate-fadein-delay-3 { animation: fadeInUp 0.4s ease 0.3s both; }
+
+/* Search input icon fix */
+.input-field.pl-9, [style*="padding-left:2.5rem"] {
+  padding-left: 2.5rem !important;
+}
+
+/* ===== BUTTON GLOW ANIMATION ===== */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 4px 15px rgba(245,197,24,0.3); }
+  50% { box-shadow: 0 4px 25px rgba(245,197,24,0.6); }
+}
+.btn-primary {
+  animation: glowPulse 2s ease infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover {
+  transform: scale(1.02) translateY(-1px);
+  box-shadow: 0 6px 30px rgba(245,197,24,0.5) !important;
+  animation: none;
+}
+.btn-primary:active {
+  transform: scale(0.98);
+}

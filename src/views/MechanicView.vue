@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div>
     <div class="flex items-center justify-between mb-8">
       <div>
@@ -129,6 +129,7 @@
 </template>
 
 <script setup>
+import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import { PlusIcon, WrenchScrewdriverIcon, TrashIcon, XMarkIcon, UserGroupIcon, CheckCircleIcon, ClockIcon } from '@heroicons/vue/24/outline'

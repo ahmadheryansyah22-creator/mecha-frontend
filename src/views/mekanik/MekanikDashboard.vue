@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="animate-fadein">
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
@@ -137,6 +137,51 @@
         </div>
       </div>
     </div>
+  <!-- Tips & Checklist -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+      <div class="card">
+        <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
+          <FireIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Tips Mekanik Profesional
+        </h2>
+        <div class="space-y-3">
+          <div v-for="tip in tips" :key="tip.title" class="flex items-start gap-3 p-3 rounded-xl" :style="{ backgroundColor: 'var(--bg-primary)' }">
+            <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" :style="{ background: tip.gradient }">
+              <component :is="tip.icon" class="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <p class="text-sm font-medium" :style="{ color: 'var(--text-primary)' }">{{ tip.title }}</p>
+              <p class="text-xs mt-0.5" :style="{ color: 'var(--text-muted)' }">{{ tip.desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="font-semibold mb-4 flex items-center gap-2 text-sm" :style="{ color: 'var(--text-primary)' }">
+          <ClipboardDocumentListIcon class="w-4 h-4" :style="{ color: 'var(--accent)' }" /> Checklist Hari Ini
+        </h2>
+        <div class="space-y-2">
+          <div v-for="(item, i) in checklist" :key="i" @click="item.done = !item.done"
+            class="flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:opacity-80 transition-all"
+            :style="{ backgroundColor: 'var(--bg-primary)' }">
+            <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all"
+              :style="item.done ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border-color)' }">
+              <CheckCircleIcon v-if="item.done" class="w-3 h-3 text-black" />
+            </div>
+            <span class="text-sm flex-1" :style="{ color: item.done ? 'var(--text-muted)' : 'var(--text-primary)', textDecoration: item.done ? 'line-through' : 'none' }">{{ item.label }}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full" :style="item.done ? { backgroundColor: '#22c55e20', color: '#22c55e' } : { backgroundColor: 'var(--bg-secondary)', color: 'var(--text-muted)' }">{{ item.done ? 'Selesai' : 'Belum' }}</span>
+          </div>
+        </div>
+        <div class="mt-3 pt-3" :style="{ borderTop: '1px solid var(--border-color)' }">
+          <div class="flex justify-between text-xs mb-1.5">
+            <span :style="{ color: 'var(--text-muted)' }">Progress</span>
+            <span class="font-bold" :style="{ color: 'var(--accent)' }">{{ checklist.filter(c => c.done).length }}/{{ checklist.length }}</span>
+          </div>
+          <div class="h-1.5 rounded-full overflow-hidden" :style="{ backgroundColor: 'var(--bg-primary)' }">
+            <div class="h-full rounded-full transition-all duration-500" :style="{ width: (checklist.filter(c => c.done).length / checklist.length * 100) + '%', backgroundColor: 'var(--accent)' }"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -233,5 +278,17 @@ onMounted(async () => {
   finally { loading.value = false }
 })
 
+const tips = [
+  { title: 'Gunakan timer pengerjaan', desc: 'Catat waktu kerja untuk estimasi order berikutnya', icon: ClockIcon, gradient: 'linear-gradient(135deg,#f59e0b,#d97706)' },
+  { title: 'Foto kondisi kendaraan', desc: 'Dokumentasi sebelum & sesudah servis untuk transparansi', icon: TruckIcon, gradient: 'linear-gradient(135deg,#3b82f6,#2563eb)' },
+  { title: 'Update status order', desc: 'Selalu update status agar customer tidak khawatir', icon: ClipboardDocumentListIcon, gradient: 'linear-gradient(135deg,#22c55e,#16a34a)' },
+]
+const checklist = ref([
+  { label: 'Cek order masuk hari ini', done: false },
+  { label: 'Siapkan tools & sparepart', done: false },
+  { label: 'Update status order aktif', done: false },
+  { label: 'Catat hasil diagnosa', done: false },
+  { label: 'Konfirmasi selesai ke customer', done: false },
+])
 onUnmounted(() => clearInterval(timer))
 </script>

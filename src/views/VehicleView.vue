@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div>
     <div class="flex items-center justify-between mb-8">
       <div>
@@ -14,7 +14,7 @@
     </div>
 
     <div class="card">
-      <div v-if="loading" class="text-center py-8" :style="{ color: `var(--text-muted)` }">Memuat data...</div>
+      <SkeletonLoader type="table" :count="5" />
       <div v-else-if="vehicles.length === 0" class="text-center py-8" :style="{ color: `var(--text-muted)` }">Belum ada data kendaraan</div>
       <div v-else class="overflow-x-auto">
         <table class="w-full">
@@ -74,6 +74,7 @@
 </template>
 
 <script setup>
+import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { PlusIcon, TruckIcon } from '@heroicons/vue/24/outline'

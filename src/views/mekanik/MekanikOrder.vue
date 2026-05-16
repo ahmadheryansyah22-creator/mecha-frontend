@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div>
     <div class="mb-8">
       <h1 class="text-2xl font-bold flex items-center gap-3" :style="{ color: `var(--text-primary)` }">
@@ -32,10 +32,7 @@
     </div>
 
     <div class="rounded-2xl p-6" :style="{ backgroundColor: `var(--bg-secondary)`, border: `1px solid var(--border-color)` }">
-      <div v-if="loading" class="flex flex-col items-center justify-center py-16 gap-3">
-        <ClipboardDocumentListIcon class="w-12 h-12 animate-pulse" :style="{ color: `var(--accent)` }" />
-        <p :style="{ color: `var(--text-muted)` }">Memuat order...</p>
-      </div>
+      <SkeletonLoader v-if="loading" type="list" :count="4" />
       <div v-else-if="filteredOrders.length === 0" class="flex flex-col items-center justify-center py-16 gap-3">
         <ClipboardDocumentListIcon class="w-12 h-12 opacity-30" :style="{ color: `var(--text-muted)` }" />
         <p :style="{ color: `var(--text-muted)` }">Tidak ada order</p>
@@ -57,11 +54,11 @@
           </div>
 
           <div class="grid grid-cols-2 gap-3 mb-4 text-sm" :style="{ color: `var(--text-secondary)` }">
-            <p>🚗 {{ order.vehicle?.license_plate || '-' }}</p>
-            <p>📅 {{ order.created_at?.slice(0,10) }}</p>
-            <p>📋 {{ order.status }}</p>
+            <p>Ã°Å¸Å¡â€” {{ order.vehicle?.license_plate || '-' }}</p>
+            <p>Ã°Å¸â€œâ€¦ {{ order.created_at?.slice(0,10) }}</p>
+            <p>Ã°Å¸â€œâ€¹ {{ order.status }}</p>
             <p class="font-semibold" :style="{ color: `var(--accent)` }">
-              💰 Fee: Rp {{ order.mechanic_fee ? Number(order.mechanic_fee).toLocaleString('id-ID') : 'Belum ditentukan' }}
+              Ã°Å¸â€™Â° Fee: Rp {{ order.mechanic_fee ? Number(order.mechanic_fee).toLocaleString('id-ID') : 'Belum ditentukan' }}
             </p>
           </div>
 
@@ -74,19 +71,19 @@
             <button @click="respondOrder(order.id, 'rejected')"
               class="flex-1 py-2 rounded-xl text-sm font-medium transition-all"
               :style="{ border: `1px solid rgba(248,113,113,0.4)`, color: `#f87171` }">
-              ✕ Tolak
+              Ã¢Å“â€¢ Tolak
             </button>
             <button @click="respondOrder(order.id, 'accepted')"
               class="flex-1 py-2 rounded-xl text-sm font-semibold transition-all"
               :style="{ backgroundColor: `var(--accent)`, color: `#000` }">
-              ✓ Terima
+              Ã¢Å“â€œ Terima
             </button>
           </div>
           <div v-else-if="order.mechanic_status === 'accepted' && order.status !== 'completed'" class="flex gap-3">
             <button @click="selesaikanOrder(order.id)"
               class="w-full py-2 rounded-xl text-sm font-semibold"
               :style="{ backgroundColor: `var(--accent)`, color: `#000` }">
-              ✓ Tandai Selesai
+              Ã¢Å“â€œ Tandai Selesai
             </button>
           </div>
         </div>
@@ -96,6 +93,7 @@
 </template>
 
 <script setup>
+import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import { ClipboardDocumentListIcon, ClockIcon, CheckCircleIcon, XCircleIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
