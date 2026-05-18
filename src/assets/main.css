@@ -166,10 +166,6 @@ body {
 }
 
 /* ===== SIDEBAR ACTIVE ===== */
-.router-link-active {
-  background: var(--accent-glow) !important;
-  color: var(--accent) !important;
-}
 
 /* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
@@ -239,9 +235,6 @@ th { font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spa
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-fadein {
-  animation: fadeInUp 0.4s ease forwards;
-}
 .animate-fadein-delay-1 { animation: fadeInUp 0.4s ease 0.1s both; }
 .animate-fadein-delay-2 { animation: fadeInUp 0.4s ease 0.2s both; }
 .animate-fadein-delay-3 { animation: fadeInUp 0.4s ease 0.3s both; }
@@ -278,4 +271,9 @@ input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--text-primary) !important;
   caret-color: var(--text-primary) !important;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ===== MENU ACTIVE GLOW ===== */
+.menu-glow {
+  box-shadow: 0 0 12px rgba(245, 197, 24, 0.6), 0 0 24px rgba(245, 197, 24, 0.3);
 }

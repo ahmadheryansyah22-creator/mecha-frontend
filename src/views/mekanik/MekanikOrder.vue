@@ -54,11 +54,11 @@
           </div>
 
           <div class="grid grid-cols-2 gap-3 mb-4 text-sm" :style="{ color: `var(--text-secondary)` }">
-            <p>Ã°Å¸Å¡â€” {{ order.vehicle?.license_plate || '-' }}</p>
-            <p>Ã°Å¸â€œâ€¦ {{ order.created_at?.slice(0,10) }}</p>
-            <p>Ã°Å¸â€œâ€¹ {{ order.status }}</p>
+            <p> {{ order.vehicle?.license_plate || '-' }}</p>
+            <p> {{ order.created_at?.slice(0,10) }}</p>
+            <p> {{ order.status }}</p>
             <p class="font-semibold" :style="{ color: `var(--accent)` }">
-              Ã°Å¸â€™Â° Fee: Rp {{ order.mechanic_fee ? Number(order.mechanic_fee).toLocaleString('id-ID') : 'Belum ditentukan' }}
+               Fee: Rp {{ order.mechanic_fee ? Number(order.mechanic_fee).toLocaleString('id-ID') : 'Belum ditentukan' }}
             </p>
           </div>
 
@@ -71,19 +71,19 @@
             <button @click="respondOrder(order.id, 'rejected')"
               class="flex-1 py-2 rounded-xl text-sm font-medium transition-all"
               :style="{ border: `1px solid rgba(248,113,113,0.4)`, color: `#f87171` }">
-              Ã¢Å“â€¢ Tolak
+               Tolak
             </button>
             <button @click="respondOrder(order.id, 'accepted')"
               class="flex-1 py-2 rounded-xl text-sm font-semibold transition-all"
               :style="{ backgroundColor: `var(--accent)`, color: `#000` }">
-              Ã¢Å“â€œ Terima
+               Terima
             </button>
           </div>
           <div v-else-if="order.mechanic_status === 'accepted' && order.status !== 'completed'" class="flex gap-3">
             <button @click="selesaikanOrder(order.id)"
               class="w-full py-2 rounded-xl text-sm font-semibold"
               :style="{ backgroundColor: `var(--accent)`, color: `#000` }">
-              Ã¢Å“â€œ Tandai Selesai
+               Tandai Selesai
             </button>
           </div>
         </div>

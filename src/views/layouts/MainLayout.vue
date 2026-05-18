@@ -130,7 +130,7 @@ const menus = [
   { path: '/dashboard/profil', icon: UserIcon, label: 'Profil Saya' },
 ]
 
-const isActive = (path) => path === '/' ? route.path === '/' : route.path.startsWith(path)
+const isActive = (path) => route.path === path || route.path === path + '/'
 
 const user = JSON.parse(localStorage.getItem('user') || '{}')
 const userName = computed(() => user.name || 'Admin')

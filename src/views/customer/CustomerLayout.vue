@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div :class="isDark ? `dark` : `light`" class="min-h-screen" :style="{ backgroundColor: `var(--bg-primary)` }">
     <nav class="sticky top-0 z-50 px-6 py-4 flex items-center justify-between transition-all duration-300"
       :style="{ backgroundColor: `var(--sidebar-bg)`, borderBottom: `1px solid var(--sidebar-border)` }">
@@ -10,9 +10,9 @@
       <div class="hidden md:flex items-center gap-1">
         <button v-for="menu in menus" :key="menu.path"
           @click="$router.push(menu.path)"
-          class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group"
+          class="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group hover:bg-yellow-400/10 hover:text-yellow-400 hover:shadow-[0_0_12px_rgba(245,197,24,0.3)]"
           :style="checkActive(menu.path)
-            ? { backgroundColor: `var(--accent)`, color: `#000` }
+            ? { backgroundColor: `rgba(245,197,24,0.12)`, color: `var(--accent)`, boxShadow: `0 0 16px rgba(245,197,24,0.5), inset 0 0 0 1px rgba(245,197,24,0.3)` }
             : { color: `var(--text-secondary)` }">
           <component :is="menu.icon"
             class="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-110" />
@@ -88,7 +88,7 @@ import { ref, computed } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import { useThemeStore } from "@/stores/theme"
 import axios from "axios"
-import {
+import { StarIcon, UserCircleIcon,
   HomeIcon, MapPinIcon, ClipboardDocumentListIcon, CpuChipIcon,
   MoonIcon, SunIcon, ArrowRightOnRectangleIcon, UserIcon, ChevronDownIcon,
 } from "@heroicons/vue/24/outline"
@@ -104,6 +104,8 @@ const menus = [
   { path: "/customer", icon: HomeIcon, label: "Beranda" },
   { path: "/customer/bengkel", icon: MapPinIcon, label: "Cari Bengkel" },
   { path: "/customer/order", icon: ClipboardDocumentListIcon, label: "Order Saya" },
+  { path: "/customer/rating", icon: StarIcon, label: "Rating" },
+  { path: "/customer/profil", icon: UserCircleIcon, label: "Profil" },
   { path: "/customer/ai-diagnostic", icon: CpuChipIcon, label: "AI Diagnostic" },
 ]
 

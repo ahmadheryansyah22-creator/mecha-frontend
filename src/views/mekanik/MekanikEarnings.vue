@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="animate-fadein">
     <div class="flex items-center justify-between mb-8">
       <div>
@@ -50,7 +50,7 @@
             <p class="text-sm font-medium" :style="{ color: 'var(--text-primary)' }">Order #{{ order.id }}</p>
             <p class="text-xs" :style="{ color: 'var(--text-muted)' }">{{ order.created_at?.slice(0,10) }} · {{ order.vehicle?.license_plate || '-' }}</p>
           </div>
-          <p class="text-sm font-bold shrink-0" :style="{ color: 'var(--accent)' }">Rp {{ formatRupiah(order.total_price) }}</p>
+          <p class="text-sm font-bold shrink-0" :style="{ color: 'var(--accent)' }">Rp {{ formatRupiah(order.mechanic_fee) }}</p>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@ const orders = ref([])
 const loading = ref(true)
 
 const completedOrders = computed(() => orders.value.filter(o => o.status === 'selesai'))
-const totalEarnings = computed(() => completedOrders.value.reduce((sum, o) => sum + (o.total_price || 0), 0))
+const totalEarnings = computed(() => completedOrders.value.reduce((sum, o) => sum + (o.mechanic_fee || 0), 0))
 const avgFee = computed(() => completedOrders.value.length ? Math.round(totalEarnings.value / completedOrders.value.length) : 0)
 const formatRupiah = (v) => new Intl.NumberFormat('id-ID').format(v || 0)
 

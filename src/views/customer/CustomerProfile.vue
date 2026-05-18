@@ -1,27 +1,43 @@
 <template>
   <div>
     <div class="mb-8">
-      <h1 class="text-2xl font-bold flex items-center gap-2" :style="{ color: `var(--text-primary)` }"><UserIcon class="w-7 h-7" :style="{ color: `var(--accent)` }" /> Profil Saya</h1>
+      <h1 class="text-2xl font-bold flex items-center gap-2" :style="{ color: 'var(--text-primary)' }">
+        <UserCircleIcon class="w-7 h-7" :style="{ color: 'var(--accent)' }" />
+        Profil Saya
+      </h1>
       <p class="mt-1" :style="{ color: 'var(--text-secondary)' }">Kelola informasi akun kamu</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Kartu Profil -->
       <div class="card flex flex-col items-center text-center py-8">
-        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-4" :style="{ backgroundColor: 'var(--accent)' }">
-          <span class="text-4xl font-bold text-black">{{ userInitial }}</span>
+        <!-- Foto Profil -->
+        <div class="relative mb-4">
+          <div class="w-24 h-24 rounded-full overflow-hidden" :style="{ backgroundColor: 'var(--accent)' }">
+            <img v-if="previewPhoto" :src="previewPhoto" class="w-full h-full object-cover" />
+            <span v-else class="w-full h-full flex items-center justify-center text-4xl font-bold text-black">{{ userInitial }}</span>
+          </div>
+          <label class="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center cursor-pointer shadow-lg transition-all hover:scale-110"
+            :style="{ backgroundColor: 'var(--accent)' }">
+            <CameraIcon class="w-4 h-4 text-black" />
+            <input type="file" accept="image/*" class="hidden" @change="onPhotoChange" />
+          </label>
         </div>
+
         <h2 class="text-xl font-bold mb-1" :style="{ color: 'var(--text-primary)' }">{{ user.name }}</h2>
         <span class="text-xs px-3 py-1 rounded-full font-medium mb-4" :style="{ backgroundColor: 'var(--accent-soft)', color: 'var(--accent)' }">
-          {{ roleLabel }}
+          Customer
         </span>
         <p class="text-sm" :style="{ color: 'var(--text-secondary)' }">{{ user.email }}</p>
+        <p class="text-sm mt-1" :style="{ color: 'var(--text-muted)' }">{{ user.phone || 'Belum ada nomor HP' }}</p>
+
+        <p v-if="photoMsg" class="text-xs mt-3" style="color: #22c55e;">{{ photoMsg }}</p>
       </div>
 
-      <!-- Form Edit Profil -->
+      <!-- Form Edit -->
       <div class="card md:col-span-2">
         <h3 class="font-semibold mb-6 flex items-center gap-2" :style="{ color: 'var(--text-primary)' }">
-          <UserIcon class="w-5 h-5" :style="{ color: 'var(--accent)' }" />
+          <PencilSquareIcon class="w-5 h-5" :style="{ color: 'var(--accent)' }" />
           Edit Informasi
         </h3>
 
@@ -32,26 +48,23 @@
           {{ error }}
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
             <label class="block text-sm mb-2" :style="{ color: 'var(--text-secondary)' }">Nama Lengkap</label>
             <input v-model="form.name" type="text" class="input-field" />
-            </div>
           </div>
           <div>
             <label class="block text-sm mb-2" :style="{ color: 'var(--text-secondary)' }">Email</label>
             <input v-model="form.email" type="email" class="input-field" />
-            </div>
           </div>
           <div>
             <label class="block text-sm mb-2" :style="{ color: 'var(--text-secondary)' }">No. Telepon</label>
-            <input v-model="form.phone" type="tel" class="input-field" />
-            </div>
+            <input v-model="form.phone" type="tel" class="input-field" placeholder="081234567890" />
           </div>
           <div>
             <label class="block text-sm mb-2" :style="{ color: 'var(--text-secondary)' }">Alamat</label>
-            <input v-model="form.address" type="text" class="input-field" />
-            </div>
+            <input v-model="form.address" type="text" class="input-field" placeholder="Jl. Contoh No. 1" />
+          </div>
         </div>
 
         <button @click="updateProfile" :disabled="loading" class="btn-primary px-6 py-2 rounded-lg flex items-center gap-2">
@@ -66,7 +79,7 @@
             <LockClosedIcon class="w-5 h-5" :style="{ color: 'var(--accent)' }" />
             Ganti Password
           </h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <label class="block text-sm mb-2" :style="{ color: 'var(--text-secondary)' }">Password Lama</label>
               <input v-model="passForm.old_password" type="password" class="input-field" />
@@ -76,15 +89,16 @@
               <input v-model="passForm.new_password" type="password" class="input-field" />
             </div>
             <div>
-              <label class="block text-sm mb-2" :style="{ color: 'var(--text-secondary)' }">Konfirmasi Password</label>
+              <label class="block text-sm mb-2" :style="{ color: 'var(--text-secondary)' }">Konfirmasi</label>
               <input v-model="passForm.new_password_confirmation" type="password" class="input-field" />
             </div>
           </div>
-          <button @click="changePassword" :disabled="loadingPass" class="mt-4 px-6 py-2 rounded-lg flex items-center gap-2 text-sm font-medium border transition-all" :style="{ borderColor: 'var(--accent)', color: 'var(--accent)' }">
+          <button @click="changePassword" :disabled="loadingPass" class="px-6 py-2 rounded-lg flex items-center gap-2 text-sm font-medium border transition-all" :style="{ borderColor: 'var(--accent)', color: 'var(--accent)' }">
             <KeyIcon class="w-4 h-4" />
             {{ loadingPass ? 'Memproses...' : 'Ganti Password' }}
           </button>
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -93,18 +107,19 @@
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
 import {
-  UserIcon, EnvelopeIcon, PhoneIcon, MapPinIcon,
-  LockClosedIcon, KeyIcon, CheckIcon, ArrowPathIcon, CheckCircleIcon
+  UserCircleIcon, PencilSquareIcon, CheckCircleIcon,
+  LockClosedIcon, KeyIcon, CheckIcon, ArrowPathIcon, CameraIcon
 } from '@heroicons/vue/24/outline'
 
 const loading = ref(false)
 const loadingPass = ref(false)
 const success = ref(false)
 const error = ref('')
+const photoMsg = ref('')
+const previewPhoto = ref(null)
 
 const user = ref(JSON.parse(localStorage.getItem('user') || '{}'))
 const userInitial = computed(() => (user.value.name || 'U')[0].toUpperCase())
-const roleLabel = computed(() => ({ customer: 'Customer', bengkel: 'Bengkel', mekanik: 'Mekanik' }[user.value.role] || 'User'))
 
 const form = ref({ name: '', email: '', phone: '', address: '' })
 const passForm = ref({ old_password: '', new_password: '', new_password_confirmation: '' })
@@ -116,7 +131,23 @@ onMounted(() => {
     phone: user.value.phone || '',
     address: user.value.address || '',
   }
+  const savedPhoto = localStorage.getItem('photo_' + user.value.id)
+  if (savedPhoto) previewPhoto.value = savedPhoto
 })
+
+const onPhotoChange = (e) => {
+  const file = e.target.files[0]
+  if (!file) return
+  if (file.size > 2 * 1024 * 1024) { error.value = 'Foto maksimal 2MB'; return }
+  const reader = new FileReader()
+  reader.onload = (ev) => {
+    previewPhoto.value = ev.target.result
+    localStorage.setItem('photo_' + user.value.id, ev.target.result)
+    photoMsg.value = 'Foto profil diperbarui!'
+    setTimeout(() => photoMsg.value = '', 3000)
+  }
+  reader.readAsDataURL(file)
+}
 
 const updateProfile = async () => {
   loading.value = true

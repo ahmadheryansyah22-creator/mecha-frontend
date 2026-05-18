@@ -11,7 +11,7 @@
     </div>
 
     <div class="card">
-      <div v-if="loading" class="text-center py-8" :style="{ color: `var(--text-muted)` }">Memuat data...</div>
+      <SkeletonLoader v-if="loading" type="table" :count="5" />
       <div v-else-if="transactions.length === 0" class="text-center py-8" :style="{ color: `var(--text-muted)` }">Belum ada data transaksi</div>
       <div v-else class="overflow-x-auto">
         <table class="w-full">
@@ -62,6 +62,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import axios from 'axios'
 import { PlusIcon, BanknotesIcon } from '@heroicons/vue/24/outline'
 

@@ -313,8 +313,7 @@ onMounted(async () => {
     allOrders.value = oRes.data.data?.data || oRes.data.data || []
     orders.value = allOrders.value.slice(0, 5)
 
-    const totalTrx = allOrders.value.filter(o => o.status === 'selesai' || o.status === 'completed')
-      .reduce((s, o) => s + (o.total_price || 0), 0)
+    const totalTrx = allOrders.value.filter(o => o.status === 'selesai' || o.status === 'completed').reduce((s, o) => s + (parseFloat(o.final_price) || parseFloat(o.total_price) || 0), 0)
     stats.value[3].value = 'Rp ' + formatRupiah(totalTrx)
     stats.value[0].mekanikCount = mRes.data.data?.total || mRes.data.data?.length || 0
   } catch (err) {

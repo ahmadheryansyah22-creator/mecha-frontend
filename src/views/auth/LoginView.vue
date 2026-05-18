@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div :class="isDark ? 'dark' : 'light'" class="min-h-screen flex" :style="{ backgroundColor: 'var(--bg-primary)' }">
 
     <!-- Left Panel -->
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <p class="text-gray-600 text-xs relative z-10">© 2026 MECHA. All rights reserved.</p>
+      <p class="text-gray-600 text-xs relative z-10">Â© 2026 MECHA. All rights reserved.</p>
     </div>
 
     <!-- Right Panel -->
@@ -168,7 +168,7 @@ const login = async () => {
       const role = res.data.data.user.role
       if (role === 'customer') router.push('/customer')
       else if (role === 'mekanik') router.push('/portal-mekanik')
-      else router.push('/')
+      else router.push('/dashboard')
     } else {
       errorMsg.value = res.data.message
     }
@@ -194,7 +194,7 @@ const loginWithGoogle = async () => {
         const role = res.data.data.user.role
         if (role === 'customer') router.push('/customer')
         else if (role === 'mekanik') router.push('/portal-mekanik')
-        else router.push('/')
+        else router.push('/dashboard')
       }
     } else {
       errorMsg.value = res.data.message

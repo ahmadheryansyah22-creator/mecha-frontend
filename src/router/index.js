@@ -46,6 +46,7 @@ const router = createRouter({
         { path: 'order', name: 'customer-order', component: () => import('../views/customer/CustomerOrder.vue') },
         { path: 'ai-diagnostic', name: 'customer-ai-diagnostic', component: () => import('../views/customer/CustomerAiDiagnostic.vue') },
         { path: 'profil', name: 'customer-profil', component: () => import('../views/customer/CustomerProfile.vue') },
+        { path: 'rating', name: 'customer-rating', component: () => import('../views/customer/CustomerRating.vue') },
       ]
     },
   ]
